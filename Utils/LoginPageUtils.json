@@ -1,0 +1,21 @@
+[
+    {
+        "Url": "https://pms-staging.medyaan.com/userlogin"
+    },
+    {
+        "UserName": "7339300833",  
+        "Password": "Test@123"
+    },
+    {
+        "UserName": "7094755100",  
+        "Password": "Test@123"
+    },
+    {
+        "UserName": "7339300833",
+        "Password": "Test@12345"
+    },
+    {
+        "UserName": "70947551",
+        "Password": "Test@1"
+    }
+]

@@ -1,0 +1,26 @@
+[
+{
+ "taskname":"Automation Policy - 01",
+ "project":"TestProject",
+ "assetname":"Table",
+ "auditrequired":"Yes",
+ "Plannedhours":"00:15",
+ "starttime1":"14",
+ "starttime2":"00",
+ "endtime1":"",
+ "endtime1":"",
+ 
+ 
+ "recurrence":"weekday",
+ "startDate":"10",
+ "startMonth":"Sep",
+ "startYear":"2025",
+ 
+ "endDate":"30",
+ "endMonth":"Sep",
+ "endYear":"2025",
+
+ "description":"This is for Automation testing purpose"
+ 
+}
+]

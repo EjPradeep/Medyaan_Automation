@@ -1,0 +1,20 @@
+[
+    {
+        "assetname":"Automation Fan4",
+        "MovementType": "Internal",
+        "TransferType": "Temporary",
+        "Area": "Room Type",
+        "RoomType": "Sand Area",
+        "Room": "Room 10 (Dog)",
+        "DestinationArea":"Room Type",
+        "DestinationRoomType": "Room No 10",
+        "DestinationRoom": "Temporary",
+        "ExternalDestination": "Null",
+        "Purpose": "Disposal"
+    },
+    {
+    "assetCode":"F-04",
+    "Createddate":"26/08/2025"
+
+    }
+]
