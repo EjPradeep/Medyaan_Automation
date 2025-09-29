@@ -2,10 +2,6 @@
 
 exports.AssetPolicy = class AssetPolicy {
 
-
-
-
-
     constructor(page, expect) {
         this.page = page;
         this.expect = expect;
@@ -103,7 +99,7 @@ exports.AssetPolicy = class AssetPolicy {
         await this.taskName.fill(`${taskname}`);
         await this.page.waitForTimeout(1000);
         await this.page.selectOption(this.project, { label: project });
-       
+
         // Handle project selection (not implemented, assuming you need to select a project)
         await this.page.waitForTimeout(500);
 
@@ -509,8 +505,8 @@ exports.AssetPolicy = class AssetPolicy {
         await this.page.waitForTimeout(2000);
 
         //Click the edit button for the specific-policy
-       // await this.page.waitForSelector(`'${this.Editbutton}'`, {timeout: 5000,state: 'visible'   })   // other options: 'attached', 'hidden', 'detached'
-        
+        // await this.page.waitForSelector(`'${this.Editbutton}'`, {timeout: 5000,state: 'visible'   })   // other options: 'attached', 'hidden', 'detached'
+
         await this.Editbutton.click();
         await this.page.waitForTimeout(500);
         await this.backArrow.click();

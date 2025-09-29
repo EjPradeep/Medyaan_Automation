@@ -2,7 +2,7 @@
 exports.AM_Allocation = class AM_Allocation {
 
     constructor(page) {
-        this.page = page;
+        this.page = page;   
         //Select Asset Module(AssetAllocation)
         this.hoverAction1 = page.locator("//div[text()='Asset Management']");
         this.tabAction = page.locator("//div[text()='Asset Management']")

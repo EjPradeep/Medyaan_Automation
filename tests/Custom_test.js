@@ -1,52 +1,25 @@
-const { test: base, chromium } = require('@playwright/test');
+const base = require('@playwright/test');
 
-const isDebug = !!process.env.PWDEBUG;
+let sharedContext = null;
+let sharedPage = null;
 
-const test = base.extend({
-  browser: [
-    async ({ }, use) => {
-      const browser = await chromium.launch({
-        headless: false,
-       // slowMo: 50, // optional for visual clarity
+exports.test = base.test.extend({
+  context: async ({ browser }, use) => {
+    if (!sharedContext) {
+      sharedContext = await browser.newContext({headless: false, 
+        //viewport: { width: 1920, height: 1080 }  // Set manually to full HD
       });
-      await use(browser);
-      if (!isDebug) {
-        await browser.close();
-      }
-    },
-    { scope: 'worker' },
-  ],
+    }
+    await use(sharedContext);
+  },
 
-  contextpage: [
-    async ({ browser }, use) => {
-      const context = await browser.newContext();
-      await use(context);
-      if (!isDebug) {
-        await context.close();
-      }
-    },
-    { scope: 'worker' },
-  ],
-
-  Page: [
-    async ({ contextpage }, use) => {
-      const page = await contextpage.newPage();
-      await use(page);
-      if (!isDebug) {
-        await page.close();
-      }
-    },
-    { scope: 'worker' },
-  ],
+  page: async ({ context }, use) => {
+    if (!sharedPage) {
+      sharedPage = await context.newPage();
+    }
+    await use(sharedPage);
+  }
 });
 
-module.exports = {
-  test,
-  timeout: 120000, // 2 minutes per test
-  retries: 0,
-  workers: 1,
-  use: {
-    actionTimeout: 0,
-    navigationTimeout: 60000,
-  },
-};
+
+exports.expect = base.expect;

@@ -35,7 +35,8 @@ exports.Taskmanage = class Taskmanage {
     this.addTask = page.locator("//div[@class='row project-role-header m-0']//div[@class='col']//button[@type='button']");
     this.taskTitle = page.locator("//textarea[@id='name']");
     this.project = page.locator("//label[text()='Project']/following-sibling::select");
-
+   
+    //Assigned-to field
     this.assignedtoloc = page.locator(`//label[text()='Assigned To']`)
     const assignedCount = this.assignedtoloc.count();
     const assignindex = assignedCount >= 2 ? 2 : 1;
@@ -553,7 +554,7 @@ exports.Taskmanage = class Taskmanage {
     await this.searchcons.fill(SearchConsumption);
     const locator = this.page.locator(`//b[contains(translate(normalize-space(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), '${SearchConsumption}')]`);
     await locator.waitFor({ state: 'visible' });
-    
+
     await locator.click();
 
     await this.page.waitForTimeout(500);
