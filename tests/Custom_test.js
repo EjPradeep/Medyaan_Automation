@@ -7,7 +7,7 @@ exports.test = base.test.extend({
   context: async ({ browser }, use) => {
     if (!sharedContext) {
       sharedContext = await browser.newContext({headless: false, 
-        //viewport: { width: 1920, height: 1080 }  // Set manually to full HD
+        //viewport: { width: 1920, height: 1080 }  
       });
     }
     await use(sharedContext);

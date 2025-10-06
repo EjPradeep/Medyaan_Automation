@@ -1,2 +1,83 @@
-<testsuites id="" name="" tests="0" failures="0" skipped="0" errors="0" time="0.427605">
+<testsuites id="" name="" tests="9" failures="0" skipped="6" errors="0" time="43.588364">
+<testsuite name="TM_Managetask.spec.js" timestamp="2025-09-22T12:44:17.864Z" hostname="chromium" tests="9" failures="0" skipped="6" time="38.445" errors="0">
+<testcase name="TS01 - AssetManager  › TC001 - Login Page" classname="TM_Managetask.spec.js" time="13.902">
+<system-out>
+<![CDATA[Succesfully logged in
+]]>
+</system-out>
+</testcase>
+<testcase name="TS02 - TaskManagement  › TC002 - ManageTask" classname="TM_Managetask.spec.js" time="5.23">
+<system-out>
+<![CDATA[Promise {
+  [36m<pending>[39m,
+  [[32mSymbol(async_id_symbol)[39m]: [33m7884[39m,
+  [[32mSymbol(trigger_async_id_symbol)[39m]: [33m7096[39m,
+  [[32mSymbol(kResourceStore)[39m]: [90mundefined[39m
+}
+]]>
+</system-out>
+</testcase>
+<testcase name="TS02 - TaskManagement  › TC003 - Filter" classname="TM_Managetask.spec.js" time="0">
+<properties>
+<property name="skip" value="">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="TS02 - TaskManagement  › TC004 - Create Task" classname="TM_Managetask.spec.js" time="0">
+<properties>
+<property name="skip" value="">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="TS02 - TaskManagement  › TC005 - View Task" classname="TM_Managetask.spec.js" time="0">
+<properties>
+<property name="skip" value="">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="TS02 - TaskManagement  › TC006 - Edit Task" classname="TM_Managetask.spec.js" time="0">
+<properties>
+<property name="skip" value="">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="TS02 - TaskManagement  › TC007 - Task Stage Move" classname="TM_Managetask.spec.js" time="0">
+<properties>
+<property name="skip" value="">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="TS02 - TaskManagement  › TC008 - Add Consumption" classname="TM_Managetask.spec.js" time="19.312">
+<system-out>
+<![CDATA[Promise {
+  [36m<pending>[39m,
+  [[32mSymbol(async_id_symbol)[39m]: [33m14676[39m,
+  [[32mSymbol(trigger_async_id_symbol)[39m]: [33m13890[39m,
+  [[32mSymbol(kResourceStore)[39m]: [90mundefined[39m
+}
+All stages: [ [32m'Open'[39m, [32m'ToDo'[39m, [32m'Inprogress'[39m, [32m'Completed'[39m ]
+Current stage: Inprogress
+Current stage is neither Open nor Completed. Creating consumption...
+]]>
+</system-out>
+</testcase>
+<testcase name="TS02 - TaskManagement  › TC008 - Task Stage Move" classname="TM_Managetask.spec.js" time="0.001">
+<properties>
+<property name="skip" value="">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
 </testsuites>

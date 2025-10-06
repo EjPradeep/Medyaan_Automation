@@ -491,6 +491,9 @@ exports.Taskmanage = class Taskmanage {
   }
   //Click Add button in Consumption
   async CreateCons() {
+   
+   /*Check the add is enabled for the current stage if it not available it change the stage to available stage and click 
+   Add button in Consumption*/
     const { TaskTitle } = data[0];
     // Get all stages text
 
@@ -507,7 +510,7 @@ exports.Taskmanage = class Taskmanage {
 
     console.log('All stages:', allStagesText);
 
-    // Get current stage (assuming it has a special class 'active' or similar)
+    // Get current stage.
     const currentStageLocator = this.page.locator(`//strong[normalize-space()='${TaskTitle}']/../../../../../../preceding-sibling::div/h6[@class='step-name']`);
     const currentStageText = (await currentStageLocator.textContent())?.trim();
 

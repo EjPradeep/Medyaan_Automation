@@ -15,6 +15,8 @@ exports.CompliancePolicy = class CompliancePolicy {
     this.backArrow = page.locator("//div[@class='col']//*[@data-icon='arrow-left']");
     this.cancel = page.locator(`(//div[@class="text-center"]//*[@type="button"])[1]`)
     this.submit = page.locator(`(//div[@class="text-center"]//*[@type="button"])[2]`)
+
+    //Confirm Message Box
     this.confirmNo = page.locator("//span[text()='Confirm']/../../following-sibling::div/button[@class='el-button el-button--default el-button--small']")
     this.confirmYes = page.locator("//span[text()='Confirm']/../../following-sibling::div/button[@class='el-button el-button--default el-button--small el-button--primary ']")
     this.cancelIcon = page.locator("//span[text()='Confirm']/../following-sibling::button[@class='el-message-box__headerbtn']");
