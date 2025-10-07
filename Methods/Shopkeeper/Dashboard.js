@@ -7,11 +7,13 @@ exports.Dashboard = class Dashboard {
         this.Ip = page.locator("//div[@class='v-slide-group__wrapper']/div/div/following-sibling::div[contains(normalize-space(.), 'IP')]")
         this.paymentpending = page.locator("//div[@class='v-slide-group__wrapper']/div/div/following-sibling::div[contains(normalize-space(.), 'Payment Pending')]")
         this.deliverypending = page.locator("//div[@class='v-slide-group__wrapper']/div/div/following-sibling::div[contains(normalize-space(.), 'Delivery Pending')]")
+
         //for Page Load Locator
         this.loaded = this.page.locator("//div[@class='v-window__container']//div//div//div//div[@role='grid']")
 
         //search
         this.search = page.locator("//input[@id='patientquickFilter']")
+       
         //Invoice Headbuttons
         this.history = page.locator("//div[contains(@class,'options-div')]//button[@class='btn history-btn btn-secondary btn-sm']//*[name()='svg' and @data-icon='history']")
         this.dashbord = page.locator("//div[contains(@class,'options-div')]//button[@class='btn close-btn btn-secondary btn-sm']//*[name()='svg' and @data-icon='home']")
@@ -40,6 +42,11 @@ exports.Dashboard = class Dashboard {
         this.confirmYes = page.locator("//span[text()='Confirm']/../../following-sibling::div/button[@class='el-button el-button--default el-button--small el-button--primary ']")
         this.cancelIcon = page.locator("//span[text()='Confirm']/../following-sibling::button[@class='el-message-box__headerbtn']");
 
+        //BackArrow
+        this.backarrow = page.locator("//div[@class='col']//*[@data-icon='arrow-left']");
+
+        //Delivery_Button
+        this.del_button = page.locator("//button[@class='btn primary-btn submit-btn-size btn-secondary']")
 
     }
 
@@ -73,14 +80,26 @@ exports.Dashboard = class Dashboard {
 
     }
 
-    async View_Appointment(cus_name, pet_name, cus_num) {
+    async View_Appointment(cus, pet, num) {
+
+        const cus_name = cus.toLowerCase()
+        const pet_name = pet.toLowerCase()
+        const cus_num = num.toLowerCase()
+
         //view locator with Customer name, Pet name & Customer number
-        const view1 = this.page.locator(`//div[@col-id='patientname' and contains(normalize-space(),'${cus_name}')]/following-sibling::div[@col-id='petname' and contains(normalize-space(),'${pet_name}')]/following-sibling::div[contains(normalize-space(),'${cus_num}')]/following-sibling::div[@col-id='action']/div/div/button[@class='btn edit-btn btn-secondary']`)
-        // await view1.click()
+        const view1 = this.page.locator(`//div[@col-id='patientname' and contains(translate(normalize-space(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), '${cus_name}')]/following-sibling::div[@col-id='petname' and contains(translate(normalize-space(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), '${pet_name}')]/following-sibling::div[contains(translate(normalize-space(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), '${cus_num}')]/following-sibling::div[@col-id='action']/div/div/button[@class='btn edit-btn btn-secondary']`)
+
         //view locator with Pet name & Customer number
-        const view2 = this.page.locator(`//div[@col-id='petname' and contains(normalize-space(),'${pet_name}')]/following-sibling::div[contains(normalize-space(),'9345816343')]/following-sibling::div[@col-id='action']/div/div/button[@class='btn edit-btn btn-secondary']`)
-        //view locator with Customer name, Pet name & Customer number
-        const view3 = this.page.locator(`//div[@col-id='patientname' and contains(normalize-space(),'${cus_name}')]/following-sibling::div[@col-id='petname' and contains(normalize-space(),'${pet_name}')]/following-sibling::div[@col-id='action']/div/div/button[@class='btn edit-btn btn-secondary']`)
+        const view2 = this.page.locator(`//div[@col-id='petname' and contains(translate(normalize-space(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), '${pet_name}')]/following-sibling::div[contains(translate(normalize-space(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), '${cus_num}')]/following-sibling::div[@col-id='action']/div/div/button[@class='btn edit-btn btn-secondary']`)
+
+        //view locator with Customer name & Pet name 
+
+        const view3 = this.page.locator(`//div[@col-id='patientname' and contains(translate(normalize-space(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), '${cus_name}')]/following-sibling::div[@col-id='petname' and contains(translate(normalize-space(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), '${pet_name}')]/following-sibling::div[@col-id='action']/div/div/button[@class='btn edit-btn btn-secondary' or @class='btn view-btn btn-secondary']`)
+
+        //View locator for Payment Pending Tab
+        const view4 = this.page.locator(`//div[@col-id='patientname' and contains(translate(normalize-space(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), '${cus_name}')]/following-sibling::div[@col-id='action']/div/div/button[@class='btn edit-btn btn-secondary' or @class='btn view-btn btn-secondary']`).first();
+
+        await this.loaded.waitFor({ state: 'visible' })
 
 
         await this.loaded.waitFor({ state: 'visible' })
@@ -103,26 +122,31 @@ exports.Dashboard = class Dashboard {
 
             await view3.click();
         }
-        const load = this.page.locator("//div[@class='ag-center-cols-viewport']//div[@role='rowgroup']")
+        else {
+            await view4.waitFor({ state: 'visible' })
+            await view4.click();
+            await this.page.waitForTimeout(1000)
+        }
+        const load = this.page.locator("//div[@class='ag-center-cols-viewport']//div[@role='rowgroup']").first()
         await load.waitFor({ state: 'visible' })
 
         await this.page.waitForTimeout(1000)
     }
 
     async Invoice_Button(cus, pet, num) {
-      
-        const cus_name=cus.toLowerCase()
-        const pet_name=pet.toLowerCase()
-        const cus_num=num.toLowerCase()
+
+        const cus_name = cus.toLowerCase()
+        const pet_name = pet.toLowerCase()
+        const cus_num = num.toLowerCase()
 
         //view locator with Customer name, Pet name & Customer number
         const Cinvoice_button1 = this.page.locator(`//div[@col-id='patientname' and contains(translate(normalize-space(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), '${cus_name}')]/following-sibling::div[@col-id='petname' and contains(translate(normalize-space(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), '${pet_name}')]/following-sibling::div[contains(translate(normalize-space(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), '${cus_num}')]/following-sibling::div[@col-id='action']/div/div/button[@class='btn active-btn btn-secondary']`)
-       
+
         //view locator with Pet name & Customer number
         const Cinvoice_button2 = this.page.locator(`//div[@col-id='petname' and contains(translate(normalize-space(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), '${pet_name}')]/following-sibling::div[contains(translate(normalize-space(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), '${cus_num}')]/following-sibling::div[@col-id='action']/div/div/button[@class='btn active-btn btn-secondary']`)
 
         //view locator with Customer name, Pet name & Customer number
-        
+
         const Cinvoice_button3 = this.page.locator(`//div[@col-id='patientname' and contains(translate(normalize-space(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), '${cus_name}')]/following-sibling::div[@col-id='petname' and contains(translate(normalize-space(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), '${pet_name}')]/following-sibling::div[@col-id='action']/div/div/button[@class='btn active-btn btn-secondary']`)
 
         await this.loaded.waitFor({ state: 'visible' })
@@ -170,15 +194,17 @@ exports.Dashboard = class Dashboard {
     }
 
     async Search_Material(material) {
+
         await this.searchmat.fill(material);
-        const locator = this.page.locator(`//b[contains(translate(normalize-space(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), '${material}')]`);
+        const mat = material.toLowerCase();
+        const locator = this.page.locator(`//b[contains(translate(normalize-space(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), '${mat}')]`);
         await locator.waitFor({ state: 'visible' });
 
         await locator.click();
 
         await this.page.waitForTimeout(500);
     }
-    async Clear_SearchMaterial() {
+    async Clear_Search() {
         await this.clear_searchmat.waitFor({ state: 'visible' });
 
         await this.clear_searchmat.click();
@@ -199,10 +225,14 @@ exports.Dashboard = class Dashboard {
     }
 
     async Edit_Material() {
+
+        await this.edit_mat.waitFor({ state: 'visible' });
+
         await this.edit_mat.click();
         await this.page.waitForTimeout(1000);
     }
     async Delete_Material() {
+        await this.delete_mat.waitFor({ state: 'visible' });
         await this.delete_mat.click();
         await this.page.waitForTimeout(1000);
     }
@@ -211,6 +241,11 @@ exports.Dashboard = class Dashboard {
 
         await tick_mat.click(tick);
         await this.page.waitForTimeout(1000);
+
+    }
+    async Untick_Material(tick) {
+
+        await this.Tick_Material(tick)
     }
 
     async ClickDiscount() {
@@ -294,6 +329,30 @@ exports.Dashboard = class Dashboard {
     async CancelIcon() {
 
         await this.cancelIcon.click();
+        await this.page.waitForTimeout(1000);
+    }
+    async BackArrow() {
+
+        await this.backarrow.waitFor({ state: 'visible' });
+
+        await this.backarrow.click();
+        await this.page.waitForTimeout(1000);
+    }
+    async Delivery_Button_Yes() {
+
+        await this.del_button.waitFor({ state: 'visible' });
+
+        await this.del_button.click();
+        await this.ConfirmYes();
+        await this.page.waitForTimeout(1000);
+    }
+    async Delivery_Button_No() {
+
+        await this.del_button.waitFor({ state: 'visible' });
+
+        await this.del_button.click();
+        await this.ConfirmNo();
+
         await this.page.waitForTimeout(1000);
     }
 }
