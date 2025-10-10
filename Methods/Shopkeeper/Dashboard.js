@@ -12,7 +12,7 @@ exports.Dashboard = class Dashboard {
         this.loaded = this.page.locator("//div[@class='v-window__container']//div//div//div//div[@role='grid']")
 
         //search
-        this.search = page.locator("//input[@id='patientquickFilter']")
+        this.search = page.locator("//input[@id='patientquickFilter' or @id='pharmacyhistoryFilter']")
        
         //Invoice Headbuttons
         this.history = page.locator("//div[contains(@class,'options-div')]//button[@class='btn history-btn btn-secondary btn-sm']//*[name()='svg' and @data-icon='history']")
@@ -29,13 +29,10 @@ exports.Dashboard = class Dashboard {
 
         //Discount 
         this.discount = page.locator(`//div[contains(@class,'card apply-coupen-card percent-color')]//div[contains(@class,'card-body')]`);
-        this.cancel = page.locator("//div[contains(@class,'b-sidebar-outer')]/div/following-sibling::div/header[@class='b-sidebar-header']//button[@aria-label='Close']//*[name()='svg']");
+        this.xicon = page.locator("//div[contains(@class,'b-sidebar-outer')]/div/following-sibling::div/header[@class='b-sidebar-header']//button[@aria-label='Close']//*[name()='svg']");
         this.remove_coup = page.locator("//div[@class='remove-pointer']");
         this.EmpID = page.locator("//div[contains(@class,'mb-2')]//div//div//input[contains(@type,'text')]");
 
-        //Material Action fields
-        this.edit_mat = page.locator("//div[@class='edit-group btn-group btn-group-sm']/button[@class='btn edit-btn btn-secondary']")
-        this.delete_mat = page.locator("//div[@class='edit-group btn-group btn-group-sm']/button[@class='btn edit-btn btn-secondary']")
 
         //Confirm Message Box
         this.confirmNo = page.locator("//span[text()='Confirm']/../../following-sibling::div/button[@class='el-button el-button--default el-button--small']")
@@ -102,7 +99,6 @@ exports.Dashboard = class Dashboard {
         await this.loaded.waitFor({ state: 'visible' })
 
 
-        await this.loaded.waitFor({ state: 'visible' })
         if (cus_name !== '' && pet_name !== '' && cus_num !== '') {
 
             await view1.waitFor({ state: 'visible' })
@@ -224,16 +220,21 @@ exports.Dashboard = class Dashboard {
         await this.page.waitForTimeout(1000);
     }
 
-    async Edit_Material() {
+    async Edit_Material(edit) {
+        const edit_mat = this.page.locator(`//div[@col-id='medicine' and normalize-space()='${edit}']/following-sibling::div[@col-id='action']/div/div/div/button[@class="btn edit-btn btn-secondary"]`)
 
-        await this.edit_mat.waitFor({ state: 'visible' });
+        await edit_mat.waitFor({ state: 'visible' });
 
-        await this.edit_mat.click();
+        await edit_mat.click(Edit);
         await this.page.waitForTimeout(1000);
     }
-    async Delete_Material() {
-        await this.delete_mat.waitFor({ state: 'visible' });
-        await this.delete_mat.click();
+    async Delete_Material(dele) {
+       
+        const dele_mat = dele.toLowerCase()
+        const delete_mat = this.page.locator(`//div[@col-id='medicine' and contains(translate(normalize-space(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), '${dele_mat}')]/following-sibling::div[@col-id='action']/div/div/div/button[@class="btn delete-btn btn-secondary"]`)
+
+        await delete_mat.waitFor({ state: 'visible' });
+        await delete_mat.click();
         await this.page.waitForTimeout(1000);
     }
     async Tick_Material(tick) {
@@ -270,9 +271,9 @@ exports.Dashboard = class Dashboard {
     async XIcon() {
 
 
-        await this.cancel.waitFor({ state: 'visible' });
+        await this.xicon.waitFor({ state: 'visible' });
 
-        await this.cancel.click();
+        await this.xicon.click();
         await this.page.waitForTimeout(1000);
     }
     async RemoveDiscount() {
