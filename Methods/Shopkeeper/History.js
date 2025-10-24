@@ -41,7 +41,6 @@ exports.History = class History {
         this.return_reason = page.locator("//textarea[@id='cancelReason']")
 
         this.bill = page.locator("//button[@class='btn reference-btn btn-secondary']")
-
         this.reorder = page.locator("//button[@class='btn reference-btn btn-two btn-secondary']")
 
         //Confirm Message Box
@@ -121,7 +120,7 @@ exports.History = class History {
     async Download() {
         await this.download.waitFor({ state: 'visible' });
 
-        await this.proforma.click()
+        await this.download.click()
         await this.page.waitForTimeout(500);
     }
     async Clear_Date() {
@@ -222,7 +221,7 @@ exports.History = class History {
         await this.page.waitForTimeout(1000);
 
         await this.return_but.click()
-       
+
         await this.ConfirmNo()
 
 

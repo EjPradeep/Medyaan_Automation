@@ -126,9 +126,7 @@ exports.Proforma = class Proforma {
         await this.page.locator(monthLocator).click();
         await this.page.waitForTimeout(1000);
 
-        // Updated date selection with better locator
-        // try {
-        // First try exact date
+       
         const exactDateLocator = `//div[@class='el-picker-panel__content']//td[contains(@class,'available')]//span[text()='${date}']`;
         const dateElement = this.page.locator(exactDateLocator);
 

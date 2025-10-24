@@ -7,7 +7,7 @@ exports.AssetPolicy = class AssetPolicy {
         this.expect = expect;
         //Select Asset Module(AssetCategory)
         this.hoverAction = page.locator("//div[text()='Asset']");
-        this.tabAction = page.locator("//div[text()='Asset']")
+        this.tabAction = this.hoverAction
 
         // Click Action
         this.backArrow = page.locator("//div[@class='col']//*[@data-icon='arrow-left']");
@@ -35,9 +35,6 @@ exports.AssetPolicy = class AssetPolicy {
         this.startDate = this.page.locator("#startDate");
         this.endDate = page.locator("#endDate")
         this.description = page.locator("#descValue")
-        //date
-        // this.storeyear = page.locator("(//div[@x-placement='bottom-start']/div/div/div/button[@aria-label='Next Year']/../span[@class='el-date-picker__header-label'])[1]");
-        this.storemonth = page.locator("(//div[@x-placement='bottom-start']/div/div/div/button[@aria-label='Next Year']/../span[@class='el-date-picker__header-label'])[2]");
 
         //Edit Asset Policy
         this.viewbutton = page.locator(`//div[@class="ag-center-cols-container"]/*/div[text()='${assetname}']/following-sibling::*[@col-id="name" and text()='${taskname}']/following-sibling::div[@col-id='action']/div/div/*[@class='btn view-btn btn-secondary']`)

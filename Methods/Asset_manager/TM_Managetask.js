@@ -21,10 +21,9 @@ exports.Taskmanage = class Taskmanage {
     //search
     this.searchbox = page.locator("//input[@placeholder='Search']");
     const count = this.searchbox.count();
-    console.log(count);
-
     const Searchindex = count >= 2 ? 2 : 1;
     this.searchdata = page.locator(`(//input[@placeholder='Search'])[${Searchindex}]`);
+  
     //without filter search clear button
     this.searchclear1 = page.locator(`(//input[@placeholder='Search'])[${Searchindex}]//following-sibling::button`);
     //with filter search clear button

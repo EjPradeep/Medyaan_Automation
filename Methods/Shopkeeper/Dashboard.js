@@ -8,7 +8,7 @@ exports.Dashboard = class Dashboard {
         this.paymentpending = page.locator("//div[@class='v-slide-group__wrapper']/div/div/following-sibling::div[contains(normalize-space(.), 'Payment Pending')]")
         this.deliverypending = page.locator("//div[@class='v-slide-group__wrapper']/div/div/following-sibling::div[contains(normalize-space(.), 'Delivery Pending')]")
 
-        //for Page Load Locator
+        //for Page Load Purpose
         this.loaded = this.page.locator("//div[@class='v-window__container']//div//div//div//div[@role='grid']")
 
         //search

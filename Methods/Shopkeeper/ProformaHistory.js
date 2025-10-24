@@ -185,9 +185,6 @@ exports.Prof_History = class Prof_History {
         const cus_name = cus.toLowerCase()
         const pet_name = pet.toLowerCase()
 
-        //View With Customer ID or Name and Pet ID.
-        //  const View = this.page.locator(`//div[@class='ag-row-even ag-row-no-focus ag-row ag-row-level-0 ag-row-position-absolute ag-row-first']//div[@col-id='ownerid' or @col-id="patientname"][normalize-space()='Ej Pradeep']/following-sibling::div[@col-id='petid'][normalize-space()='27259']/following-sibling::div[@col-id='action']/div`)
-
         //View With Customer ID or Name and Pet ID or Name.
         const view1 = this.page.locator(`//div[   (@col-id='ownerid' or @col-id='patientname') and   contains(translate(normalize-space(.), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), '${cus_name}') ] /following-sibling::div[   (@col-id='petid' and contains(translate(normalize-space(.), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), '${pet_name}'))   or    (@col-id='petname' and .//b[contains(translate(normalize-space(.), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), '${pet_name}')]) ] /following-sibling::div[@col-id='action']/div`).first()
 

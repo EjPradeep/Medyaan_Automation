@@ -36,13 +36,6 @@ test.describe.serial('TS01 - AuditManager ', () => {
       await Asset.ViewAllocation()
       await Asset.BackArrow()
       
-
-      
-
-
-
-
-
     });
   
 });

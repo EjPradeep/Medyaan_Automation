@@ -3,8 +3,8 @@ exports.AM_Assetdisposal = class AM_Assetdisposal {
     constructor(page) {
         this.page = page;
         //Select Asset Module(AssetAllocation)
-        this.hoverAction1 = page.locator("//div[text()='Asset Management']");
-        this.tabAction = page.locator("//div[text()='Asset Management']")
+        this.hoverAction = page.locator("//div[text()='Asset Management']");
+        this.tabAction =  this.hoverAction
 
 
         this.search = page.locator("//input[@placeholder='Search']")
@@ -30,8 +30,8 @@ exports.AM_Assetdisposal = class AM_Assetdisposal {
     async Select_AssetModule() {
         await this.page.waitForTimeout(2000);
         //Tab Action
-        await this.hoverAction1.hover();
-        await this.hoverAction1.click();
+        await this.hoverAction.hover();
+        await this.hoverAction.click();
         await this.page.waitForTimeout(2000);
         for (var i = 0; i <= 1; i++) {
         await this.tabAction.press('Tab');;

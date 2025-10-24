@@ -47,10 +47,7 @@ exports.AssetRequest = class AssetRequest {
     }
     async Search(Search) {
         await this.search.waitFor({ state: 'visible' });
-        const load = "//div[@class='ag-body-viewport ag-layout-normal ag-row-no-animation']"
-
-       // await this.page.waitForSelector(load, { state: 'visible', timeout: 12000 });
-       
+        const load = "//div[@class='ag-body-viewport ag-layout-normal ag-row-no-animation']"       
         await this.page.locator(load).waitFor({ state: 'visible' });
         await this.search.fill(Search);
         await this.page.waitForTimeout(1000);

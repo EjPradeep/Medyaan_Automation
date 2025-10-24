@@ -1,4 +1,4 @@
-const { readExcel } = require('../utils/excelUtil');
+const { readExcel } = require('../../utils/excelUtil');
 const policydata = readExcel("C:/Medyaanbeg/TestData/Assetmanager.xlsx", "CompliancePolicy");
 
 
@@ -124,6 +124,7 @@ exports.CompliancePolicy = class CompliancePolicy {
     // Handle planned hours
     await this.pHours.click();
     await this.page.locator(`//div[@class='el-scrollbar__view']/div[text()="${Plannedhours}"]`).click();
+   
     // Handle start time selection
 
     await this.Starttime_handle();
