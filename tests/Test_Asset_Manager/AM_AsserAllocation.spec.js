@@ -29,15 +29,12 @@ test.describe.serial('TS02 - AssetAllocation ', () => {
 
   });
   test("TC003 - View the Allocated Asset", async ({ page }) => {
-    const { User, AssetName, AssetCode, Filter } = data[0];
+    const { User, AssetName, AssetCode } = data[0];
 
     const asset = new AM_Allocation(page);
     await asset.Select_AssetAllocation();
     await asset.View_AssTab(User, AssetName, AssetCode);
     await asset.BackArrow();
-
-
-
   });
   test.skip("TC004 - Edit the Allocated Asset", async ({ page }) => {
     const { User, AssetName, AssetCode, Filter } = data[0];

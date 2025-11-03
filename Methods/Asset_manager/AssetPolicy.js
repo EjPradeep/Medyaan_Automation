@@ -4,19 +4,25 @@ exports.AssetPolicy = class AssetPolicy {
 
     constructor(page, expect) {
         this.page = page;
-        this.expect = expect;
         //Select Asset Module(AssetCategory)
-        this.hoverAction = page.locator("//div[text()='Asset']");
-        this.tabAction = this.hoverAction
+        this.Action = page.locator("//div[text()='Asset Management']");
 
-        // Click Action
-        this.backArrow = page.locator("//div[@class='col']//*[@data-icon='arrow-left']");
-        this.cancel = page.locator(`(//div[@class="text-center"]//*[@type="button"])[1]`)
-        this.submit = page.locator(`(//div[@class="text-center"]//*[@type="button"])[2]`)
+        //
+        this.cancel = page.locator("//button[@class='btn secondary-btn cancel-btn-size mr-3 btn-secondary']")
+        this.submit = page.locator("//span[contains(text(),'Submit')]")
+
+        //Confim message 
         this.confirmNo = page.locator("//span[text()='Confirm']/../../following-sibling::div/button[@class='el-button el-button--default el-button--small']")
         this.confirmYes = page.locator("//span[text()='Confirm']/../../following-sibling::div/button[@class='el-button el-button--default el-button--small el-button--primary ']")
         this.cancelIcon = page.locator("//span[text()='Confirm']/../following-sibling::button[@class='el-message-box__headerbtn']");
-        //this.editBack = page.locator("//*[name()='svg' and @class='fa-xs back-arrow svg-inline--fa fa-arrow-left fa-w-14']")
+
+        //Search and Download
+        this.search = page.locator("//div[@class='search-grid px-0 col']/div/input[@id='sellerQuickFilter']")
+        this.download = page.locator("//button[@data-test='download-button']")
+
+        //
+        this.errorMessage = page.locator("//div[@class='required']")
+
 
         //Create_Asset Policy
         const Policydata = JSON.parse(JSON.stringify(require('../Utils/AssetPolicyUtils.json')));
@@ -24,13 +30,11 @@ exports.AssetPolicy = class AssetPolicy {
 
         this.addAssetPolicy = page.locator("//button[@class='btn primary-btn add-btn-size btn-secondary']");
         this.taskName = page.locator("#taskTitle");
-        this.project = page.locator("//label[text()='Project']/following-sibling::select[@class='custom-select']");
+        this.Project()
         this.assetName = page.locator(".multiselect__tags");
-        this.assetName2 = page.locator(`//ul[@class='multiselect__content']/li/span/span[contains(.,'${assetname}')]`)
         this.auditRequired = page.locator(`//label[text()='Audit Required?']/../div/div[@class='custom-control custom-control-inline custom-radio']/label/span[text()='${auditrequired}']`)
         this.pHours = page.locator("//div[@class='el-date-editor el-input el-input--prefix el-input--suffix el-date-editor--time-select']//input[@placeholder='HH:MM']")
         this.startTime = page.locator("//label[text()='Start Time']/../div/input")
-
         this.endTime = page.locator("//label[text()='End Time']/../div/input")
         this.startDate = this.page.locator("#startDate");
         this.endDate = page.locator("#endDate")
@@ -44,18 +48,290 @@ exports.AssetPolicy = class AssetPolicy {
 
     }
 
-    async Select_AssetModule() {
+    async Select_AssetPolicy() {
         await this.page.waitForTimeout(2000);
         //Tab Action
-        await this.hoverAction.hover();
-        await this.hoverAction.click();
+        await this.Action.hover();
+        await this.Action.click();
         await this.page.waitForTimeout(2000);
-        await this.tabAction.press('Tab')
-        await this.tabAction.press('Enter');
+        await this.Action.press('Tab')
+        await this.Action.press('Enter');
         await this.page.waitForTimeout(2000);
         await this.addAssetPolicy.hover();
         await this.page.waitForTimeout(2000);
     }
+
+
+    async AddAssetPolicy_Button() {
+
+        await this.addAssetPolicy.click();
+
+    }
+    async TaskName(data) {
+        await this.taskName.waitFor({ state: 'visible' })
+        await this.taskName.fill(data);
+        await this.page.waitForTimeout(500);
+    }
+    async Project(Select) {
+
+        await this.page.selectOption("#disposalReason", { label: `${Select}` });
+        await this.page.waitForTimeout(500);
+    }
+    async AssetName(ass) {
+        await this.assetName.click();
+        const asname = ass.toLowerCase()
+        const select = this.page.locator(`//span/span[contains(translate(normalize-space(.), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), '${asname}')]`);
+        await select.scrollIntoViewIfNeeded()
+        await select.waitFor({ state: 'visible' })
+        await select.click();
+    }
+    async AuditRequired(audit) {
+        await this.page.waitForTimeout(500)
+        const Are = audit.toLowerCase()
+
+        const select = this.page.locator(`//input[@type='radio']/../label/span[translate(normalize-space(.), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')= '${Are}']`)
+        await select.waitFor({ state: 'visible' })
+        await select.click({ force: true });
+    }
+    async Plannedhours(Plannedhours) {
+        await this.pHours.click();
+        await pHours.waitFor({ state: 'visible' })
+        await this.page.locator(`//div[@class='el-scrollbar__view']/div[text()="${Plannedhours}"]`).click();
+    }
+
+    async StartTime(StartHours, StartMin) {
+
+        // Click start time field
+        await this.startTime.click();
+        await this.page.waitForTimeout(2000);
+
+        // Select specific hour from config
+        const hours = this.page.locator("//body/div[5]/div[1]/div[1]/div[1]/div[1]/ul[1]/li");
+
+        const hoursCount = await hours.count();
+        console.log("Hours locator:", hoursCount);
+
+        // Find and select configured hour
+        for (let i = 0; i < hoursCount; i++) {
+            const hourText = await hours.nth(i).textContent();
+            if (hourText.trim() == StartHours) {
+                await hours.nth(i).click();
+                break;
+            }
+        }
+
+        await this.page.waitForTimeout(1000);
+
+        // Select specific minutes from config
+        const minutes = this.page.locator("//body/div[5]/div[1]/div/div[2]/div[1]/ul/li");
+        await minutes.first().waitFor();
+        await this.page.waitForTimeout(1000);
+        const minutesCount = await minutes.count();
+        console.log("Minutes count:", minutesCount);
+
+
+        // Find and select configured minutes
+        for (let i = 0; i < minutesCount; i++) {
+            const minuteText = await minutes.nth(i).textContent();
+            if (minuteText.trim() == StartMin) {
+                console.log("Clicking on minute:", minuteText);
+
+                await minutes.nth(i).click();
+
+                break;
+            }
+        }
+
+        // Click OK
+        await this.page.locator("//div[@x-placement='bottom-start']//button[@type='button'][normalize-space()='OK']").click();
+        await this.page.waitForTimeout(500);
+    }
+    async EndTime(Endhours, EndMin) {
+
+        // Click start time field
+        await this.page.waitForTimeout(500);
+        await this.endTime.click();
+        await this.page.waitForTimeout(1000);
+
+        // Select specific hour from config
+        const hours = this.page.locator("//body/div[@x-placement='bottom-start']/div/div/div[1]/div[1]/ul[1]/li");
+
+        const hoursCount = await hours.count();
+        console.log("Hours locator:", hoursCount);
+
+        // Find and select configured hour
+        for (let i = 0; i < hoursCount; i++) {
+            const hourText = await hours.nth(i).textContent();
+            if (hourText.trim() == Endhours) {
+                await hours.nth(i).click();
+                break;
+            }
+        }
+
+        await this.page.waitForTimeout(1000);
+
+        // Select specific minutes from config
+        const minutes = this.page.locator("//body/div[6]/div[1]/div[1]/div[2]/div[1]/ul[1]/li");
+        await minutes.first().waitFor();
+        await this.page.waitForTimeout(1000);
+        const minutesCount = await minutes.count();
+        console.log("Minutes count:", minutesCount);
+
+
+        // Find and select configured minutes
+        for (let i = 0; i < minutesCount; i++) {
+            const minuteText = await minutes.nth(i).textContent();
+            if (minuteText.trim() == EndMin) {
+                console.log("Clicking on minute:", minuteText);
+
+                await minutes.nth(i).click();
+
+                break;
+            }
+        }
+        // Click OK
+        await this.page.locator("//div[@x-placement='bottom-start']//button[@type='button'][normalize-space()='OK']").click();
+        await this.page.waitForTimeout(500);
+
+    }
+
+    async Recurrence(recurrence, startDate, startMonth, startYear, endDate, endMonth, endYear) {
+
+
+        await this.page.selectOption("//div[@id='recurrenceScroll']/label/following-sibling::select[@class='custom-select']", { value: `${recurrence}` });
+        await this.page.waitForTimeout(2000);
+
+        if (recurrence === "weekday" || recurrence === "weekend") {
+
+            const storeyear = this.page.locator("(//div[@class='el-date-picker__header']/span)[1]");
+            const storemonth = this.page.locator("(//div[@class='el-date-picker__header']/span)[2]");
+            await this.startDate.click();
+            await this.page.waitForTimeout(1000);
+
+            const getYear = await storeyear.nth(0).textContent();
+            const getYearText = await storeyear.nth(0).textContent();
+            const currentYear = parseInt(getYearText.trim());
+            const targetYear = parseInt(startYear);
+
+
+            //disabled
+            const isEnabled = await this.page.locator("//tr[@class='el-date-table__row']/td")
+            const count = await isEnabled.count();
+            //console.log(count);
+
+            for (let j = 0; j < count; j++) {
+                const element = isEnabled.nth(j);  // get the element locator
+
+                const className = await element.getAttribute('class'); // get the class attribute
+               
+                if (currentYear === targetYear || className == "normal disabled") {
+                    await this.page.waitForTimeout(1000);
+                    await this.page.locator("(//tr[@class='el-date-table__row']/td[@class='available today'])[1]").click();
+                    await this.page.waitForTimeout(2000);
+
+
+                } else {
+
+                    await this.handleDateTimeSelection(this.startDate, startDate, startMonth, startYear, false);
+                    await this.page.waitForTimeout(2000);
+
+                }
+
+                await this.handleDateTimeSelection(this.endDate, endDate, endMonth, endYear, true);
+                break;
+            }
+        }
+
+    }
+    async Date(dateField, date, month, year, isEndDate = false) {
+        await dateField.click();
+        await this.page.waitForTimeout(500);
+
+        // Updated calendar index handling
+        const calendarIndex = isEndDate ? 2 : 1;
+
+        // More specific locators for each calendar instance
+        const yearLabel = this.page.locator(`(//div[@class='el-date-picker__header']/span)[${calendarIndex * 2 - 1}]`);
+        const monthLabel = this.page.locator(`(//div[@class='el-date-picker__header']/span)[${calendarIndex * 2}]`);
+
+        // Get and handle year selection
+        const currentYear = parseInt(await yearLabel.textContent());
+        const targetYear = parseInt(year);
+
+        if (currentYear !== targetYear) {
+            const yearDiff = targetYear - currentYear;
+            const nextYearBtn = this.page.locator(`(//button[@class='el-picker-panel__icon-btn el-date-picker__next-btn el-icon-d-arrow-right'])[${calendarIndex}]`);
+
+            for (let i = 0; i < Math.abs(yearDiff); i++) {
+                await nextYearBtn.click();
+                await this.page.waitForTimeout(500);
+            }
+        }
+
+        // Updated month selection with index-based locators
+        await this.page.waitForTimeout(500)
+        await monthLabel.click();
+        await this.page.waitForTimeout(1000);
+
+        // Updated month selector with better visibility check
+        const monthLocator = `(//div[@class='el-picker-panel__content'])[${calendarIndex}]//a[contains(text(),'${month}')]`;
+        await this.page.waitForSelector(monthLocator);
+        await this.page.locator(monthLocator).click();
+        await this.page.waitForTimeout(1000);
+
+        // Updated date selection with better locator
+        const exactDateLocator = `(//div[@class='el-picker-panel__content'])[${calendarIndex}]//td[contains(@class,'available')]//span[text()='${date}']`;
+        const dateElement = this.page.locator(exactDateLocator);
+
+        // Wait for either exact date or available dates to be visible
+        await Promise.race([
+            dateElement.waitFor({ state: 'visible', timeout: 5000 }),
+            this.page.waitForSelector(`(//div[@class='el-picker-panel__content'])[${calendarIndex}]//td[contains(@class,'available')]`,
+                { state: 'visible', timeout: 5000 })
+        ]);
+
+        // If exact date is found, click it
+        if (await dateElement.count() > 0) {
+            console.log("dateElement:", dateElement);
+
+            await dateElement.click();
+        } else {
+            // Otherwise, find the date among available dates
+            const availableDates = this.page.locator(`(//div[@class='el-picker-panel__content'])[${calendarIndex}]//td[contains(@class,'available')]`);
+            const count = await availableDates.count();
+            console.log("Available dates count:", count);
+
+
+            for (let i = 0; i < count; i++) {
+                console.log("284 Iterating available date index:", i);
+
+                const dateText = await availableDates.nth(i).textContent();
+                // console.log(`Checking date: ${dateText}`);
+                if (dateText.trim() === date) {
+                    await availableDates.nth(i).click();
+                    console.log(`Clicked on date: ${date}`);
+
+                    break;
+
+                }
+            }
+        }
+
+
+        await this.page.waitForTimeout(1000);
+
+        // Verify selection
+        const selectedValue = await dateField.inputValue();
+        console.log(`Selected date: ${selectedValue}`);
+    }
+
+    async Description(Description) {
+        await this.description.scrollIntoViewIfNeeded();
+
+        await this.description.fill(Description);
+        await this.page.waitForTimeout(500);
+    }
+
     async Click_AddAssetPolicy() {
         await this.page.waitForTimeout(2000);
         await this.addAssetPolicy.click();
@@ -79,67 +355,24 @@ exports.AssetPolicy = class AssetPolicy {
         await this.page.waitForTimeout(1000)
         await this.backArrow.click();
     }
-    async CreateAssetPolicy() {
-        // Import data from a JSON file
-        const Policydata = JSON.parse(JSON.stringify(require('../Utils/AssetPolicyUtils.json')));
-        const { taskname, project, assetname, auditrequired, Plannedhours, starttime1, starttime2, description } = Policydata[0];
-
-        // Destructure and extract values from Policydata
-        const startTime1 = Policydata.starttime1;
-        const startTime2 = Policydata.starttime2;
-        const taskName = Policydata.taskname;
-
-        // Start automating steps
-        await this.page.waitForTimeout(500);
-        await this.addAssetPolicy.click();
-        await this.page.waitForTimeout(500);
-        await this.taskName.fill(`${taskname}`);
-        await this.page.waitForTimeout(1000);
-        await this.page.selectOption(this.project, { label: project });
-
-        // Handle project selection (not implemented, assuming you need to select a project)
-        await this.page.waitForTimeout(500);
-
-        await this.assetName.click();
-        await this.page.waitForTimeout(500);
-
-
-        if (assetname == true) {
-            await this.assetName2.click();
-            await this.page.waitForTimeout(500);
-        } else {
-            await this.assetName2.first().click();
-        }
-
-        await this.page.waitForTimeout(1000);
-
-        await this.auditRequired.click();
-        await this.page.waitForTimeout(500);
-
-        // Handle planned hours
-        await this.pHours.click();
-        await this.page.locator(`//div[@class='el-scrollbar__view']/div[text()="${Plannedhours}"]`).click();
-        // Handle start time selection
-
-        await this.Starttime_handle();
-        await this.handleRecurrence();
-        await this.page.waitForTimeout(500);
-        await this.description.fill(`${description}`);
-        await this.page.waitForTimeout(500);
-        await this.submit.click();
-        await this.page.waitForTimeout(500);
-        await this.submitNo.click();
-        await this.page.waitForTimeout(500);
-        await this.submit.click();
-        await this.page.waitForTimeout(500);
-        await this.submitYes.click();
-        await this.page.waitForTimeout(2000);
+    async CreateAssetPolicy(TN, Pro, AN, AR, PH, SHrs, SMin, EHrs, EMin, rec, Sdate, Smon, Syear,Edate, Emon, Eyear,Des) {
+        await this.AddAssetPolicy_Button()
+        await this.TaskName(TN)
+        await this.Project(Pro)
+        await this.AssetName(AN)
+        await this.AuditRequired(AR)
+        await this.Plannedhours(PH)
+        await this.StartTime(SHrs, SMin)
+        await this.EndTime(EHrs, EMin)
+        await this.Recurrence(rec,Sdate, Smon, Syear,Edate, Emon, Eyear)
+        await this.Description(Des)
+        
 
 
     }
-    async Starttime_handle() {
+    async Starttime_handle(starttime1, starttime2) {
         const Policydata = JSON.parse(JSON.stringify(require('../Utils/AssetPolicyUtils.json')));
-        const { starttime1, starttime2 } = Policydata[0];
+        const { } = Policydata[0];
 
         // Click start time field
         await this.startTime.click();
@@ -426,67 +659,6 @@ exports.AssetPolicy = class AssetPolicy {
          }*/
     }
 
-    async handleRecurrence() {
-
-        const Policy = JSON.parse(JSON.stringify(require('../Utils/AssetPolicyUtils.json')));
-        const { recurrence, startDate, startMonth, startYear, endDate, endMonth, endYear } = Policy[0];
-
-        await this.page.selectOption("//div[@id='recurrenceScroll']/label/following-sibling::select[@class='custom-select']", { value: `${recurrence}` });
-        await this.page.waitForTimeout(2000);
-
-        if (recurrence === "weekday" || recurrence === "weekend") {
-
-            const storeyear = this.page.locator("(//div[@class='el-date-picker__header']/span)[1]");
-            const storemonth = this.page.locator("(//div[@class='el-date-picker__header']/span)[2]");
-            await this.startDate.click();
-            await this.page.waitForTimeout(1000);
-            //await this.page.locator("(//div[@class='el-date-picker__header']//button[@class='el-picker-panel__icon-btn el-date-picker__next-btn el-icon-d-arrow-right'])[1]").click();
-            const getYear = await storeyear.nth(0).textContent();
-
-            //console.log(getYear);
-            //console.log(year);
-
-            const getYearText = await storeyear.nth(0).textContent();
-            const currentYear = parseInt(getYearText.trim());
-            const targetYear = parseInt(startYear);
-
-
-            //disabled
-            const isEnabled = await this.page.locator("//tr[@class='el-date-table__row']/td")
-            const count = await isEnabled.count();
-            //console.log(count);
-
-            for (let j = 0; j < count; j++) {
-                const element = isEnabled.nth(j);  // get the element locator
-
-                const className = await element.getAttribute('class'); // get the class attribute
-                //  try {
-                // Handle start date with increased timeouts
-                if (currentYear === targetYear || className == "normal disabled") {
-                    await this.page.waitForTimeout(1000);
-                    await this.page.locator("(//tr[@class='el-date-table__row']/td[@class='available today'])[1]").click();
-                    await this.page.waitForTimeout(2000);
-
-
-                } else {
-
-                    await this.handleDateTimeSelection(this.startDate, startDate, startMonth, startYear, false);
-                    await this.page.waitForTimeout(2000);
-
-                }
-
-                await this.handleDateTimeSelection(this.endDate, endDate, endMonth, endYear, true);
-                //await this.page.waitForTimeout(2000)
-                break;
-                // Handle end date with increased timeouts
-                // } catch (error) {
-                //   console.error(`Date selection failed: ${error.message}`);
-                //throw error;
-                //}
-            }
-        }
-
-    }
     async Edit_AssetPolicy() {
 
         const Policy = JSON.parse(JSON.stringify(require('../Utils/AssetPolicyUtils.json')));

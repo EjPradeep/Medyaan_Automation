@@ -23,7 +23,7 @@ exports.Taskmanage = class Taskmanage {
     const count = this.searchbox.count();
     const Searchindex = count >= 2 ? 2 : 1;
     this.searchdata = page.locator(`(//input[@placeholder='Search'])[${Searchindex}]`);
-  
+
     //without filter search clear button
     this.searchclear1 = page.locator(`(//input[@placeholder='Search'])[${Searchindex}]//following-sibling::button`);
     //with filter search clear button
@@ -34,7 +34,7 @@ exports.Taskmanage = class Taskmanage {
     this.addTask = page.locator("//div[@class='row project-role-header m-0']//div[@class='col']//button[@type='button']");
     this.taskTitle = page.locator("//textarea[@id='name']");
     this.project = page.locator("//label[text()='Project']/following-sibling::select");
-   
+
     //Assigned-to field
     this.assignedtoloc = page.locator(`//label[text()='Assigned To']`)
     const assignedCount = this.assignedtoloc.count();
@@ -175,8 +175,8 @@ exports.Taskmanage = class Taskmanage {
     await this.page.waitForTimeout(500);
   }
 
-  async Priority() {
-    const { Priority } = data[0];
+  async Priority(Priority) {
+    //Assign priority level in numeric
     await this.page.waitForTimeout(500);
     if (Priority == '1') {
       await this.page.locator("//span[@class='b-rating-star flex-grow-1 focused b-rating-star-empty']").click();
@@ -243,8 +243,6 @@ exports.Taskmanage = class Taskmanage {
     await this.page.waitForTimeout(1000);
 
     // Updated date selection with better locator
-    // try {
-    // First try exact date
     const exactDateLocator = `//div[@class='el-picker-panel__content']//td[contains(@class,'available')]//span[text()='${date}']`;
     const dateElement = this.page.locator(exactDateLocator);
 
@@ -268,10 +266,8 @@ exports.Taskmanage = class Taskmanage {
 
 
       for (let i = 0; i < count; i++) {
-        //  console.log("284 Iterating available date index:", i);
 
         const dateText = await availableDates.nth(i).textContent();
-        // console.log(`Checking date: ${dateText}`);
         if (dateText.trim() === date) {
           await availableDates.nth(i).click();
           console.log(`Clicked on date: ${date}`);
@@ -294,8 +290,7 @@ exports.Taskmanage = class Taskmanage {
 
 
 
-  async StartTime() {
-    const { StartHours, StartMin } = data[0];
+  async StartTime(StartHours, StartMin) {
 
     // Click start time field
     await this.startTime.click();
@@ -346,8 +341,7 @@ exports.Taskmanage = class Taskmanage {
 
 
 
-  async EndTime() {
-    const { Endhours, EndMin } = data[0];
+  async EndTime(Endhours, EndMin) {
 
     // Click start time field
     await this.page.waitForTimeout(500);
@@ -396,8 +390,7 @@ exports.Taskmanage = class Taskmanage {
     await this.page.waitForTimeout(500);
 
   }
-  async Description() {
-    const { Description } = data[0];
+  async Description(Description) {
     await this.description.scrollIntoViewIfNeeded();
 
     await this.description.fill(Description);
@@ -490,9 +483,9 @@ exports.Taskmanage = class Taskmanage {
   }
   //Click Add button in Consumption
   async CreateCons() {
-   
-   /*Check the add is enabled for the current stage if it not available it change the stage to available stage and click 
-   Add button in Consumption*/
+
+    /*Check the add is enabled for the current stage if it not available it change the stage to available stage and click 
+    Add button in Consumption*/
     const { TaskTitle } = data[0];
     // Get all stages text
 

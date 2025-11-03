@@ -5,21 +5,22 @@ const policydata = readExcel("C:/Medyaanbeg/TestData/Assetmanager.xlsx", "Compli
 exports.CompliancePolicy = class CompliancePolicy {
 
   constructor(page) {
-    this.page = page;
-    
-    //Select Asset Module(AssetCategory)
-    this.hoverAction = page.locator("//div[text()='Compliance']");
-    this.tabAction = page.locator("//div[text()='Compliance']")
+   this.page = page;
+        //Select Asset Module(AssetCategory)
+        this.Action = page.locator("//div[text()='Asset Management']");
 
-    // Click Action
-    this.backArrow = page.locator("//div[@class='col']//*[@data-icon='arrow-left']");
-    this.cancel = page.locator(`(//div[@class="text-center"]//*[@type="button"])[1]`)
-    this.submit = page.locator(`(//div[@class="text-center"]//*[@type="button"])[2]`)
+        //
+        this.cancel = page.locator("//button[@class='btn secondary-btn cancel-btn-size mr-3 btn-secondary']")
+        this.submit = page.locator("//span[contains(text(),'Submit')]")
 
-    //Confirm Message Box
-    this.confirmNo = page.locator("//span[text()='Confirm']/../../following-sibling::div/button[@class='el-button el-button--default el-button--small']")
-    this.confirmYes = page.locator("//span[text()='Confirm']/../../following-sibling::div/button[@class='el-button el-button--default el-button--small el-button--primary ']")
-    this.cancelIcon = page.locator("//span[text()='Confirm']/../following-sibling::button[@class='el-message-box__headerbtn']");
+        //Confim message 
+        this.confirmNo = page.locator("//span[text()='Confirm']/../../following-sibling::div/button[@class='el-button el-button--default el-button--small']")
+        this.confirmYes = page.locator("//span[text()='Confirm']/../../following-sibling::div/button[@class='el-button el-button--default el-button--small el-button--primary ']")
+        this.cancelIcon = page.locator("//span[text()='Confirm']/../following-sibling::button[@class='el-message-box__headerbtn']");
+
+        //Search and Download
+        this.search = page.locator("//div[@class='search-grid px-0 col']/div/input[@id='sellerQuickFilter']")
+        this.download = page.locator("//button[@data-test='download-button']")
 
     //Create - AddCompliancePolicy
 
@@ -189,93 +190,6 @@ exports.CompliancePolicy = class CompliancePolicy {
     // Click OK
     await this.page.locator("//div[@x-placement='bottom-start']//button[@type='button'][normalize-space()='OK']").click();
     await this.page.waitForTimeout(500);
-  }
-
-
-
-
-  async handleDateTimeSelection(dateField, date, month, year, isEndDate = false) {
-    await dateField.click();
-    await this.page.waitForTimeout(500);
-
-    // Updated calendar index handling
-    const calendarIndex = isEndDate ? 2 : 1;
-
-    // More specific locators for each calendar instance
-    const yearLabel = this.page.locator(`(//div[@class='el-date-picker__header']/span)[${calendarIndex * 2 - 1}]`);
-    const monthLabel = this.page.locator(`(//div[@class='el-date-picker__header']/span)[${calendarIndex * 2}]`);
-
-    // Get and handle year selection
-    const currentYear = parseInt(await yearLabel.textContent());
-    const targetYear = parseInt(year);
-
-    if (currentYear !== targetYear) {
-      const yearDiff = targetYear - currentYear;
-      const nextYearBtn = this.page.locator(`(//button[@class='el-picker-panel__icon-btn el-date-picker__next-btn el-icon-d-arrow-right'])[${calendarIndex}]`);
-
-      for (let i = 0; i < Math.abs(yearDiff); i++) {
-        await nextYearBtn.click();
-        await this.page.waitForTimeout(500);
-      }
-    }
-
-    // Updated month selection with index-based locators
-    await this.page.waitForTimeout(500)
-    await monthLabel.click();
-    await this.page.waitForTimeout(1000);
-
-    // Updated month selector with better visibility check
-    const monthLocator = `(//div[@class='el-picker-panel__content'])[${calendarIndex}]//a[contains(text(),'${month}')]`;
-    await this.page.waitForSelector(monthLocator);
-    await this.page.locator(monthLocator).click();
-    await this.page.waitForTimeout(1000);
-
-    // Updated date selection with better locator
-    // try {
-    // First try exact date
-    const exactDateLocator = `(//div[@class='el-picker-panel__content'])[${calendarIndex}]//td[contains(@class,'available')]//span[text()='${date}']`;
-    const dateElement = this.page.locator(exactDateLocator);
-
-    // Wait for either exact date or available dates to be visible
-    await Promise.race([
-      dateElement.waitFor({ state: 'visible', timeout: 5000 }),
-      this.page.waitForSelector(`(//div[@class='el-picker-panel__content'])[${calendarIndex}]//td[contains(@class,'available')]`,
-        { state: 'visible', timeout: 5000 })
-    ]);
-
-    // If exact date is found, click it
-    if (await dateElement.count() > 0) {
-      console.log("dateElement:", dateElement);
-
-      await dateElement.click();
-    } else {
-      // Otherwise, find the date among available dates
-      const availableDates = this.page.locator(`(//div[@class='el-picker-panel__content'])[${calendarIndex}]//td[contains(@class,'available')]`);
-      const count = await availableDates.count();
-      console.log("Available dates count:", count);
-
-
-      for (let i = 0; i < count; i++) {
-        console.log("284 Iterating available date index:", i);
-
-        const dateText = await availableDates.nth(i).textContent();
-        // console.log(`Checking date: ${dateText}`);
-        if (dateText.trim() === date) {
-          await availableDates.nth(i).click();
-          console.log(`Clicked on date: ${date}`);
-
-          break;
-
-        }
-      }
-    }
-
-
-    await this.page.waitForTimeout(1000);
-
-    // Verify selection
-    const selectedValue = await dateField.inputValue();
-    console.log(`Selected date: ${selectedValue}`);
   }
 
   async handleRecurrence() {

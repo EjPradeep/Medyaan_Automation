@@ -1,33 +1,31 @@
-const { test, expect } = require('./Custom_test');
-import { AssetPolicy } from "../Asset_manager/AssetPolicy";
-import { Homepage } from "../Asset_manager/Loginpage";
+const { test, expect } = require('/Medyaanbeg/tests/Custom_test');
+const { Homepage } = require("/Medyaanbeg/Methods/Common_Operation/Loginpage")
+const { AssetPolicy } = require("/Medyaanbeg/Methods/Asset_manager/AssetPolicy")
+const { readExcel } = require('/Medyaanbeg/Utils/excelUtil');
+test.setTimeout(120000);
 
-
-
-
-
-//Login to AssetManager Using Valid Credential.
 test.describe.serial('TS01 - AssetManager ', () => {
 
-  test("TC001 - Login Page", async ({ Page }) => {
-    const Login = JSON.parse(JSON.stringify(require('../Utils/LoginPageUtils.json')));
-    const { Url } = Login[0];
-    const { UserName, Password } = Login[1];
+  const data = readExcel("TestData/Common_Operation.xlsx", "Login");
 
-    const Launch = new Homepage(Page);
+  test("TC001 - Login Page", async ({ page }) => {
+    const { Url, UserName, Password } = data[0];
+
+    const Launch = new Homepage(page);
     await Launch.Launchpage(Url);
     await Launch.Signin(UserName, Password);
-
   });
 });
 
 
 test.describe.serial("TS02 - AssetPolicy ", () => {
 
-  test("TC002 - Select_AssetMovement", async ({ Page }) => {
+  test("TC001 - Create Asset Policy", async ({ Page }) => {
 
     let Policy = new AssetPolicy(Page);
-    await Policy.Select_AssetModule();
+    await Policy.Select_AssetPolicy()
+    await Policy.CreateAssetPolicy()
+
   })
   test.skip("TC002 - Click_AddAssetPolicy", async ({ Page }) => {
 

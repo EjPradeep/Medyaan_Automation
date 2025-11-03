@@ -28,36 +28,8 @@ exports.AM_AssetMovement = class AM_AssetMovement {
         this.maintananceTab = page.locator("//div[contains(text(),'Maintenance')]");
 
         //Create - AddAssetAllocation
-        // this.ClickSelectAsset = page.locator(".multiselect__tags");
-        // const Movement = JSON.parse(JSON.stringify(require('../Utils/AssetMovementUtils.json')));
-        // const { assetname, MovementType, TransferType, Area, RoomType, Room, DestinationArea, DestinationRoomType,
-        //     DestinationRoom, ExternalDestination, Purpose } = Movement[0];
-        // //Select -AssetName
         this.selectAsset = page.locator(".multiselect__tags");
 
-        // //MovementType
-        // this.MovementType = page.locator(`//span[text()='${MovementType}']`)
-        // //TransferType
-        // this.TransferType = page.locator(`//span[contains(text(),'${TransferType}')]`)
-        // //Area
-        // this.Area = page.locator(`//*[@class='py-0 col-md-6 col-12']/label[text()='Area']/following-sibling::div//span[text()='${Area}']`)
-        // //Room Type
-        // this.RoomType = page.selectOption("//*[@id='sourceLocationType']", { label: `${RoomType}` })
-        // //Room  
-        // this.Room = page.selectOption("//*[@id='sourceLocation']", { label: `${Room}` })
-        // //Destination Area
-        // this.DestinationArea = page.locator(`//*[@class='py-0 col-md-6 col-12']/label[text()='Destination Area']/following-sibling::div//span[text()='${DestinationArea}']`)
-        // //Destination Room Type
-        // this.DestinationRoomType = page.selectOption("//*[@id='destinationLocationType']", { label: `${DestinationRoomType}` });
-        // //Destination Room
-        // this.DestinationRoom = page.selectOption("//*[@id='destinationLocationType']", { label: `${DestinationRoom}` });
-        // //External Destination
-        // //Return Date
-        // this.ReturnDate = page.fill('#returnDate', '26/08/2025').then(() => page.press('#returnDate', 'Enter'));
-        // //Purpose
-        // this.Purpose = page.selectOption("//*[@id='returnPurpose']", { label: `${Purpose}` });
-        // //Gate Pass
-        // this.GatePass = page.fill("#getPassId", "Null");
 
 
     }
@@ -290,7 +262,6 @@ exports.AM_AssetMovement = class AM_AssetMovement {
     async BackArrow() {
 
         this.backArrow = this.page.locator("//*[@data-icon='arrow-left']");
-
 
         if (await this.backArrow.nth(2).isVisible()) {
             await this.backArrow.nth(2).waitFor({ state: 'visible' });
@@ -525,14 +496,15 @@ exports.AM_AssetMovement = class AM_AssetMovement {
             if (isVisible) {
                 await view.waitFor({ state: 'visible' });
                 await view.click();
+                await this.page.waitForTimeout(3000)
                 return;
             }
 
         }
-        //For Page Loading Purpose
-        const load = this.page.locator("//div[@class='ag-center-cols-viewport']//div[@role='presentation']")
-        await load.waitFor({ state: 'visible' });
-        await this.page.waitForTimeout(1000)
+        // //For Page Loading Purpose
+        // const load = this.page.locator("//div[@id='discount-master-sidebar']//div[@class='b-sidebar-body']")
+        // await load.waitFor({ state: 'visible' });
+        // await this.page.waitForTimeout(3000)
 
     }
     //View with Tab Navigation
@@ -665,15 +637,16 @@ exports.AM_AssetMovement = class AM_AssetMovement {
                     await this.Maintenance_Tab();
                 }
 
-                await this.View_Movement();
+                await this.View_Movement(unam, name, code, mtype, Ttype, date);
+                await this.page.waitForTimeout(3000)
                 return;
             }
         }
 
         //For Page Loading Purpose
-        const load = this.page.locator("//div[@class='ag-center-cols-viewport']//div[@role='presentation']")
+        const load = this.page.locator("//div[@class='sidebar-container from-field1']")
         await load.waitFor({ state: 'visible' });
-        await this.page.waitForTimeout(1000)
+        await this.page.waitForTimeout(3000)
 
     }
     async Edit_Movement(unam, name, code, mtype, Ttype, date) {
@@ -801,6 +774,7 @@ exports.AM_AssetMovement = class AM_AssetMovement {
             if (isVisible) {
                 await edit.waitFor({ state: 'visible' });
                 await edit.click();
+                await this.page.waitForTimeout(3000)
                 return;
             }
 
@@ -945,7 +919,8 @@ exports.AM_AssetMovement = class AM_AssetMovement {
                     await this.Maintenance_Tab();
                 }
 
-                await this.Edit_Movement();
+                await this.Edit_Movement(unam, name, code, mtype, Ttype, date);
+                await this.page.waitForTimeout(3000)
                 return;
             }
         }
@@ -967,7 +942,7 @@ exports.AM_AssetMovement = class AM_AssetMovement {
     }
 
     async Complete_Maintenance(unam, name, code, mtype, Ttype, date, reason) {
-        await this.View_Movement(unam, name, code, mtype, Ttype, date);
+        await this.Edit_AssTab(unam, name, code, mtype, Ttype, date);
         await this.Complete();
         await this.Reason(reason);
         await this.Submit();

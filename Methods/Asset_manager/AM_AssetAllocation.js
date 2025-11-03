@@ -408,14 +408,10 @@ exports.AM_Allocation = class AM_Allocation {
             if (isVisible) {
                 await view.waitFor({ state: 'visible' });
                 await view.click();
+                await this.page.waitForTimeout(2000)
                 return;
             }
-
         }
-        //For Page Loading Purpose
-        const load = this.page.locator("//div[@class='ag-center-cols-viewport']//div[@role='presentation']")
-        await load.waitFor({ state: 'visible' });
-        await this.page.waitForTimeout(1000)
 
     }
     //View with Tab Navigation
@@ -474,14 +470,10 @@ exports.AM_Allocation = class AM_Allocation {
                 }
 
                 await view.click();
+                await this.page.waitForTimeout(2000)
                 return;
             }
         }
-
-        //For Page Loading Purpose
-        const load = this.page.locator("//div[@class='ag-center-cols-viewport']//div[@role='presentation']")
-        await load.waitFor({ state: 'visible' });
-        await this.page.waitForTimeout(1000)
 
     }
 
@@ -530,13 +522,11 @@ exports.AM_Allocation = class AM_Allocation {
             if (isVisible) {
                 await Edit.waitFor({ state: 'visible' });
                 await Edit.click();
+                await this.page.waitForTimeout(2000)
                 return;
             }
 
-        }   //For Page Loading Purpose
-        const load = this.page.locator("//div[@class='from-field1']")
-        await load.waitFor({ state: 'visible' });
-        await this.page.waitForTimeout(1000)
+        }
     }
 
     async Delete_Asset(Id, name, code) {

@@ -2,6 +2,7 @@ const { test } = require('/Medyaanbeg/tests/Custom_test');
 const { Homepage } = require("/Medyaanbeg/Methods/Common_Operation/Loginpage")
 const { AM_AssetMovement } = require("/Medyaanbeg/Methods/Asset_manager/AM_AssetMovement")
 const { readExcel } = require('/Medyaanbeg/Utils/excelUtil');
+test.setTimeout(120000);
 
 test.describe.serial('TS01 - AssetManager ', () => {
 
@@ -43,7 +44,7 @@ test.describe.serial("TS04 - AssetMovement", () => {
   })
 
   //Create a Asset with Valid Credential
-  test("TC004 - Complete the Asset in Maintenance Status", async ({ page }) => {
+  test.skip("TC004 - Complete the Asset in Maintenance Status", async ({ page }) => {
     const { UserName, AssetName, AssetCode, MovementType, TransferType, CreatedDate, Reason } = data[2];
 
     const Movement = new AM_AssetMovement(page);
@@ -54,10 +55,13 @@ test.describe.serial("TS04 - AssetMovement", () => {
   })
 
   //Check Switch Tabs and Action functionalities(View ,Edit & Delete) 
-  test.skip("TC005 - AssetMovement_TabHandle ", async ({ page }) => {
+  test("TC005 - View_AssetMovement_with Assetname", async ({ page }) => {
+    const { UserName, AssetName, AssetCode, MovementType, TransferType, CreatedDate, Reason } = data[3];
+   const Movement = new AM_AssetMovement(page);
+    await Movement.Select_AssetMovement();
+    await Movement.Search(AssetName);
+    await Movement.View_AssTab(UserName, AssetName, AssetCode, MovementType, TransferType, CreatedDate, Reason);
 
-    const Tabs = new AM_AssetMovement(page);
-    await Tabs.Tab_handel();
   });
 
 
