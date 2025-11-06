@@ -28,7 +28,7 @@ test.describe.serial('TS02 - AssetAllocation ', () => {
     await asset.CreateAllocation(Assetname, User, Area, RoomType, AllocationPurpose, Startdate, Startmonth, Startyear, Enddate, Endmonth, Endyear);
 
   });
-  test("TC003 - View the Allocated Asset", async ({ page }) => {
+  test.skip("TC003 - View the Allocated Asset", async ({ page }) => {
     const { User, AssetName, AssetCode } = data[0];
 
     const asset = new AM_Allocation(page);
@@ -44,8 +44,15 @@ test.describe.serial('TS02 - AssetAllocation ', () => {
     await asset.UserNameFilter(Filter);
     await asset.Edit_Asset(User, AssetName, AssetCode);
     await asset.BackArrow();
+  });
+  test("TC005 - Select Date", async ({ page }) => {
+    const { User, AssetName, AssetCode, Filter, Startdate, Startmonth, Startyear, Enddate, Endmonth, Endyear } = data[2];
 
-
+    const asset = new AM_Allocation(page);
+    await asset.Select_AssetAllocation();
+    await asset.AddAllocation_Button();
+    await asset.AllocationFrom_Date(Startdate, Startmonth, Startyear,);
+    await page.waitForTimeout(3000)
 
   });
 

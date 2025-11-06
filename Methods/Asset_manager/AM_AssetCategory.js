@@ -29,7 +29,7 @@ exports.AM_AssetCategory = class AM_AssetCategory {
     }
 
     async Select_AssetCategory() {
-        await this.page.waitForTimeout(2000);
+        await this.page.waitForTimeout(1000);
         //Tab Action
         await this.Action.hover();
         await this.Action.click();

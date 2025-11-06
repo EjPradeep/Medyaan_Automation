@@ -19,7 +19,7 @@ test.describe.serial('TS01 - AssetManager ', () => {
 test.describe.serial('TS02 - AssetCategory ', () => {
   const data = readExcel("TestData/Assetmanager.xlsx", "AssetCategory");
 
-  //select Asset_Allocation Module from Asset_Management Menu.
+  //select Asset_Category Module from Asset_Management Menu.
   test("TC002 - Create_AssetCategory with Valid Credential", async ({ page }) => {
 
     const { AssetCategory, Description } = data[4]
