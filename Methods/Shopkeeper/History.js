@@ -151,7 +151,7 @@ exports.History = class History {
         const view1 = this.page.locator(`//div[(@col-id='ownerid' or @col-id='patientname') and   contains(translate(normalize-space(.), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), '${cus_name}') ] /following-sibling::div[   (@col-id='petid' and contains(translate(normalize-space(.), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), '${pet_name}'))   or    (@col-id='petname' and .//b[contains(translate(normalize-space(.), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), '${pet_name}')]) ] /following-sibling::div[@col-id='action']/div`).first()
 
         //View With Customer ID or Name
-        const view2 = this.page.locator(`//div[(@col-id='ownerid' or @col-id='patientname')    and contains(translate(normalize-space(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), '${cus_name}') ]/following-sibling::div[@col-id='action']/div`).first()
+        const view2 = this.page.locator(`//div[(@col-id='ownerid' or @col-id='patientname')    and contains(translate(normalize-space(.), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), '${cus_name}') ]/following-sibling::div[@col-id='action']/div`).first()
 
         await this.loaded.waitFor({ state: 'visible' })
 

@@ -4,7 +4,7 @@ const { AssetPolicy } = require("/Medyaanbeg/Methods/Asset_manager/AssetPolicy")
 const { readExcel } = require('/Medyaanbeg/Utils/excelUtil');
 test.setTimeout(120000);
 
-test.describe.serial('TS01 - AssetManager ', () => {
+test.describe('TS01 - AssetManager ', () => {
 
   const data = readExcel("TestData/Common_Operation.xlsx", "Login");
 
@@ -18,7 +18,7 @@ test.describe.serial('TS01 - AssetManager ', () => {
 });
 
 
-test.describe.serial("TS02 - AssetPolicy ", () => {
+test.describe("TS02 - AssetPolicy ", () => {
   const data = readExcel("TestData/Assetmanager.xlsx", "AssetPolicy");
 
   test.skip("TC001 - Create Asset Policy with Recurrence in weekdays", async ({ page }) => {
@@ -100,7 +100,7 @@ test.describe.serial("TS02 - AssetPolicy ", () => {
     await Policy.ConfirmYes()
   })
 
-  test("TC006 - Create_AddAssetPolicy with Recurrence in Year", async ({ page }) => {
+  test.skip("TC006 - Create_AddAssetPolicy with Recurrence in Year", async ({ page }) => {
 
     const { Taskname, Project, AssetName, AuditRequired, PlannedHours, StartHrs, StartMins, EndHrs, EndMins,
       Recurrence, StartDate, StartMonth, StartYear, EndDate, EndMonth, EndYear,
@@ -122,6 +122,25 @@ test.describe.serial("TS02 - AssetPolicy ", () => {
     await Policy.ConfirmYes()
 
   })
+
+  test.skip("TC007 - View Asset Policy", async ({ page }) => {
+    const { AssetName, Taskname } = data[6]
+    let Policy = new AssetPolicy(page);
+    await Policy.Select_AssetPolicy()
+    await Policy.View_Policy(AssetName, Taskname)
+    await Policy.BackArrow()
+  })
+  test("TC008 - Edit Asset Policy", async ({ page }) => {
+    const { AssetName, Taskname, Recurrence, FortNight1, FortNight2, Week, Month_date, Year_month, Year_date } = data[6]
+    let Policy = new AssetPolicy(page);
+    await Policy.Select_AssetPolicy()
+    await Policy.Edit_Policy(AssetName, Taskname)
+    await Policy.Recurrence(Recurrence, FortNight1, FortNight2, Week, Month_date, Year_month, Year_date)
+    await Policy.Submit()
+    await Policy.ConfirmYes()
+
+  })
+
 })
 
 

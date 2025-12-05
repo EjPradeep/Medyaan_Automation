@@ -1,13 +1,9 @@
-const { readExcel } = require('../../utils/excelUtil');
-const policydata = readExcel("C:/Medyaanbeg/TestData/Assetmanager.xlsx", "CompliancePolicy");
-
-
 exports.CompliancePolicy = class CompliancePolicy {
 
-  constructor(page) {
-   this.page = page;
+    constructor(page, expect) {
+        this.page = page;
         //Select Asset Module(AssetCategory)
-        this.Action = page.locator("//div[text()='Asset Management']");
+        this.Action = page.locator("//div[text()='Compliance']");
 
         //
         this.cancel = page.locator("//button[@class='btn secondary-btn cancel-btn-size mr-3 btn-secondary']")
@@ -22,292 +18,621 @@ exports.CompliancePolicy = class CompliancePolicy {
         this.search = page.locator("//div[@class='search-grid px-0 col']/div/input[@id='sellerQuickFilter']")
         this.download = page.locator("//button[@data-test='download-button']")
 
-    //Create - AddCompliancePolicy
+        //
+        this.errorMessage = page.locator("//div[@class='required']")
 
 
-    //const { project, assetname, auditrequired } = policydata[0];
-    const { taskname, assetname, auditrequired, project } = policydata[0];
+        //Create_Asset Policy
 
-    this.addCompliancePolicy = page.locator("//button[@class='btn primary-btn add-btn-size btn-secondary']");
-    this.taskName = page.locator("#taskTitle");
-    this.project = "//label[text()='Project']/following-sibling::select[@class='custom-select']";
-    // page.selectOption("//label[text()='Project']/following-sibling::select[@class='custom-select']", { lable: `${project}` });
-
-    this.assetName = page.locator(".multiselect__tags");
-    this.assetName2 = page.locator(`//ul[@class='multiselect__content']/li/span/span[contains(.,'${assetname}')]`)
-    this.auditRequired = page.locator(`//label[text()='Audit Required ? ']/../div/div[@class='custom-control custom-control-inline custom-radio']/label/span[text()='${auditrequired}']`)
-    this.pHours = page.locator("//div[@class='el-date-editor el-input el-input--prefix el-input--suffix el-date-editor--time-select']//input[@placeholder='HH:MM']")
-
-    this.startTime = page.locator("//label[text()='Start Time']/../div/input")
-    this.endTime = page.locator("//label[text()='End Time']/../div/input")
-    this.startDate = this.page.locator("#startDate");
-    this.endDate = page.locator("#endDate")
-    this.description = page.locator("#descValue")
-
-    //Edit Compliance Policy
-    this.viewbutton = page.locator(`//div[@class="ag-center-cols-container"]/*/div[text()='${assetname}']/following-sibling::*[@col-id="name" and text()='${taskname}']/following-sibling::div[@col-id='action']/div/div/*[@class='btn view-btn btn-secondary']`)
-    this.Editbutton = page.locator(`//div[@class="ag-center-cols-container"]/*/div[text()='${assetname}']/following-sibling::*[@col-id="name" and text()='${taskname}']/following-sibling::div[@col-id='action']/div/div/*[@class='btn edit-btn btn-secondary']`)
-    this.deletebutton = page.locator(`//div[@class="ag-center-cols-container"]/*/div[text()='${assetname}']/following-sibling::*[@col-id="name" and text()='${taskname}']/following-sibling::div[@col-id='action']/div/div/*[@class='btn delete-btn btn-secondary']`)
+        this.addCompliancePolicy = page.locator("//button[@class='btn primary-btn add-btn-size btn-secondary']");
+        this.taskName = page.locator("#taskTitle");
+        // this.Project()
+        this.assetName = page.locator(".multiselect__tags");
+        //   this.AuditRequired()
+        this.pHours = page.locator("//div[@class='el-date-editor el-input el-input--prefix el-input--suffix el-date-editor--time-select']//input[@placeholder='HH:MM']")
+        this.startTime = page.locator("//label[text()='Start Time']/../div/input")
+        this.endTime = page.locator("//label[text()='End Time']/../div/input")
+        this.startDate = this.page.locator("#startDate");
+        this.endDate = page.locator("#endDate")
+        this.description = page.locator("#descValue")
 
 
-
-
-
-  }
-  async Select_AssetModule() {
-    await this.page.waitForTimeout(2000);
-    //Tab Action
-    await this.hoverAction.hover();
-    await this.hoverAction.click();
-    await this.page.waitForTimeout(2000);
-    await this.tabAction.press('Tab')
-    await this.tabAction.press('Enter');
-    await this.page.waitForTimeout(2000);
-    await this.addCompliancePolicy.hover();
-    await this.page.waitForTimeout(2000);
-  }
-  async Click_AddCompliancePolicy() {
-    await this.page.waitForTimeout(2000);
-    await this.addCompliancePolicy.click();
-    await this.backArrow.click();
-    await this.addCompliancePolicy.click();
-    await this.page.waitForTimeout(1000);
-    await this.cancel.click();
-    await this.page.waitForTimeout(1000);
-    await this.cancelIcon.click();
-    await this.page.waitForTimeout(1000);
-    await this.cancel.click();
-    await this.page.waitForTimeout(1000);
-    await this.confirmNo.click();
-    await this.page.waitForTimeout(1000);
-    await this.cancel.click();
-    await this.page.waitForTimeout(1000);
-    await this.confirmYes.click();
-    await this.page.waitForTimeout(1000)
-    await this.addCompliancePolicy.click();
-    await this.submit.click();
-    await this.page.waitForTimeout(1000)
-    await this.backArrow.click();
-  }
-
-
-  async CreateCompliancePolicy() {
-    console.log(policydata);
-
-    const { assetname, Plannedhours, description, taskname, project } = policydata[0];
-    // Start automating steps
-    await this.page.waitForTimeout(500);
-    await this.addCompliancePolicy.click();
-    await this.page.waitForTimeout(500);
-    await this.taskName.fill(`${taskname}`);
-    await this.page.waitForTimeout(1000);
-    await this.page.selectOption(this.project, { label: project });
-
-    // Handle project selection (not implemented, assuming you need to select a project)
-    await this.page.waitForTimeout(1000);
-
-    await this.assetName.click();
-    await this.page.waitForTimeout(500);
-
-
-    if (assetname == true) {
-      await this.assetName2.click();
-      await this.page.waitForTimeout(500);
-    } else {
-      await this.assetName2.first().click();
     }
 
-    await this.page.waitForTimeout(1000);
-
-    await this.auditRequired.click();
-    await this.page.waitForTimeout(500);
-
-    // Handle planned hours
-    await this.pHours.click();
-    await this.page.locator(`//div[@class='el-scrollbar__view']/div[text()="${Plannedhours}"]`).click();
-   
-    // Handle start time selection
-
-    await this.Starttime_handle();
-    await this.handleRecurrence();
-
-    await this.page.waitForTimeout(500);
-    await this.description.fill(`${description}`);
-    await this.page.waitForTimeout(1000);
-    await this.submit.click();
-    await this.page.waitForTimeout(1000);
-    await this.confirmNo.click();
-    await this.page.waitForTimeout(500);
-    await this.submit.click();
-    await this.page.waitForTimeout(500);
-    await this.confirmYes.click();
-    await this.page.waitForTimeout(2000);
-  }
-  async Starttime_handle() {
-    const { starttime1, starttime2 } = policydata[0];
-
-    // Click start time field
-    await this.startTime.click();
-    await this.page.waitForTimeout(2000);
-
-    // Select specific hour from config
-    const hours = this.page.locator("//body/div[5]/div[1]/div[1]/div[1]/div[1]/ul[1]/li");
-
-    const hoursCount = await hours.count();
-    console.log("Hours locator:", hoursCount);
-
-    // Find and select configured hour
-    for (let i = 0; i < hoursCount; i++) {
-      const hourText = await hours.nth(i).textContent();
-      if (hourText.trim() === String(starttime1)) {
-        await hours.nth(i).click();
-        break;
-      }
+    async Select_CompliancePolicy() {
+        await this.page.waitForTimeout(1000);
+        //Tab Action
+        await this.Action.hover();
+        await this.Action.click();
+        await this.page.waitForTimeout(2000);
+        await this.Action.press('Tab')
+        await this.Action.press('Enter');
+        await this.page.waitForTimeout(2000);
+        await this.addCompliancePolicy.hover();
+        await this.page.waitForTimeout(2000);
     }
 
-    await this.page.waitForTimeout(1000);
 
-    // Select specific minutes from config
-    const minutes = this.page.locator("//body/div[5]/div[1]/div/div[2]/div[1]/ul/li");
-    await minutes.first().waitFor();
-    await this.page.waitForTimeout(1000);
-    const minutesCount = await minutes.count();
-    console.log("Minutes count:", minutesCount);
+    async AddCompliancePolicy_Button() {
+
+        await this.addCompliancePolicy.click();
+
+    }
+    async CreateCompliancePolicy(TN, Pro, AN, AR, SHrs, SMin, EHrs, EMin, recurrence, fortnight1, fortnight2, week, date1, month, date2, Sdate, Smon, Syear, Edate, Emon, Eyear, Des) {
+        await this.AddCompliancePolicy_Button()
+        await this.TaskName(TN)
+        await this.Project(Pro)
+        await this.AssetName(AN)
+        await this.AuditRequired(AR)
+        //await this.Plannedhours(PH)
+        await this.StartTime(SHrs, SMin)
+        await this.EndTime(EHrs, EMin)
+        await this.Recurrence(recurrence, fortnight1, fortnight2, week, date1, month, date2)
+        await this.Date(Sdate, Smon, Syear, Edate, Emon, Eyear)
+        await this.Description(Des)
+    }
+    async TaskName(data) {
+        await this.taskName.waitFor({ state: 'visible' })
+        await this.taskName.fill(data);
+        await this.page.waitForTimeout(500);
+    }
+    async Project(Select) {
+
+        await this.page.selectOption(".custom-select", { label: `${Select}` });
+        await this.page.waitForTimeout(500);
+    }
+    async AssetName(ass) {
+        await this.assetName.click();
+        const asname = ass.toLowerCase()
+        const select = this.page.locator(`//span/span[contains(translate(normalize-space(translate(., ' ', '')), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), '${asname}')]`);
+        await select.scrollIntoViewIfNeeded()
+        await select.waitFor({ state: 'visible' })
+        await select.click();
+    }
+    async AuditRequired(aud) {
+        console.log("AReq:", aud);
+        const audit = aud.toLowerCase()
 
 
-    // Find and select configured minutes
-    for (let i = 0; i < minutesCount; i++) {
-      const minuteText = await minutes.nth(i).textContent();
-      if (minuteText.trim() === String(starttime2)) {
-        console.log("Clicking on minute:", minuteText);
-
-        await minutes.nth(i).click();
-
-        break;
-      }
+        const select = this.page.locator(`//input[@type='radio']/../label/span[translate(normalize-space(translate(., ' ', '')), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')= '${audit}']`)
+        await select.waitFor({ state: 'visible' })
+        await select.click({ force: true });
+    }
+    async Plannedhours(Plannedhours) {
+        await this.pHours.waitFor({ state: 'visible' })
+        await this.pHours.click();
+        await this.page.locator(`//div[@class='el-scrollbar__view']/div[text()="${Plannedhours}"]`).click();
     }
 
-    // Click OK
-    await this.page.locator("//div[@x-placement='bottom-start']//button[@type='button'][normalize-space()='OK']").click();
-    await this.page.waitForTimeout(500);
-  }
+    async StartTime(StartHours, StartMin) {
+        console.log(`start time= ${StartHours}:${StartMin}`);
 
-  async handleRecurrence() {
+        // Click start time field
+        await this.startTime.click();
+        await this.page.waitForTimeout(1000);
 
-    // const Policy = JSON.parse(JSON.stringify(require('../Utils/AssetPolicyUtils.json')));
-    const { recurrence, startDate, startMonth, startYear, endDate, endMonth, endYear } = policydata[0];
+        // Select specific hour from config
+        const hours = this.page.locator("//div[@class='el-time-panel el-popper']//div[@class='el-time-spinner']//div[@class='el-time-spinner__wrapper el-scrollbar'][1]//ul/li");
 
-    await this.page.selectOption("//div[@id='recurrenceScroll']/label/following-sibling::select[@class='custom-select']", { value: `${recurrence}` });
-    await this.page.waitForTimeout(2000);
+        const hoursCount = await hours.count();
+        console.log("Hours locator:", hoursCount);
 
-    if (recurrence === "weekday" || recurrence === "weekend") {
-
-      const storeyear = this.page.locator("(//div[@class='el-date-picker__header']/span)[1]");
-      const storemonth = this.page.locator("(//div[@class='el-date-picker__header']/span)[2]");
-      await this.startDate.click();
-      await this.page.waitForTimeout(1000);
-      //   const getYear = await storeyear.nth(0).textContent();
-
-      //console.log(getYear);
-      //console.log(year);
-
-      const getYearText = await storeyear.nth(0).textContent();
-      const currentYear = parseInt(getYearText.trim());
-      const targetYear = parseInt(startYear);
-
-
-      //disabled
-      const isEnabled = await this.page.locator("//tr[@class='el-date-table__row']/td")
-      const count = await isEnabled.count();
-      //console.log(count);
-
-      for (let j = 0; j < count; j++) {
-        const element = isEnabled.nth(j);  // get the element locator
-        console.log("Element:", element);
-
-        const className = await element.getAttribute('class'); // get the class attribute
-        //  try {
-        // Handle start date 
-        //if (currentYear === targetYear || className == "normal disabled") 
-        if (className == "normal disabled") {
-          await this.page.waitForTimeout(1000);
-          await this.page.locator("(//tr[@class='el-date-table__row']/td[@class='available today'])[1]").click();
-          await this.page.waitForTimeout(2000);
-
-
-        } else {
-
-          await this.handleDateTimeSelection(this.startDate, startDate, startMonth, startYear, false);
+        // Find and select configured hour
+        for (let i = 0; i < hoursCount; i++) {
+            const hourText = await hours.nth(i).textContent();
+            if (hourText.trim() == StartHours) {
+                await hours.nth(i).click();
+                break;
+            }
         }
-        await this.handleDateTimeSelection(this.endDate, endDate, endMonth, endYear, true);
-        break;
 
-      }
+        await this.page.waitForTimeout(1000);
+
+        // Select specific minutes from config
+        const minutes = this.page.locator("//div[@class='el-time-panel el-popper']//div[@class='el-time-spinner']//div[@class='el-time-spinner__wrapper el-scrollbar'][2]//ul/li");
+        await minutes.first().waitFor();
+        await this.page.waitForTimeout(1000);
+        const minutesCount = await minutes.count();
+        console.log("Minutes count:", minutesCount);
+
+
+        // Find and select configured minutes
+        for (let i = 0; i < minutesCount; i++) {
+            const minuteText = await minutes.nth(i).textContent();
+            if (minuteText.trim() == StartMin) {
+                console.log("Clicking on minute:", minuteText);
+
+                await minutes.nth(i).click();
+                await this.page.waitForTimeout(500);
+
+                break;
+            }
+        }
+
+        // Click OK
+        const Ok = await this.page.locator("//div[@x-placement='bottom-start']//button[@type='button'][normalize-space()='OK']")
+        await Ok.click({ force: true })
+        await this.page.waitForTimeout(500);
+    }
+    async EndTime(Endhours, EndMin) {
+
+        // Click End time field
+        await this.endTime.click();
+        await this.page.waitForTimeout(1000);
+
+        // Select specific hour from config
+        const hours = this.page.locator("//div[@class='el-time-panel el-popper' and (@x-placement='top-start' or @x-placement='bottom-start')]//div[@class='el-time-spinner']//div[@class='el-time-spinner__wrapper el-scrollbar'][1]//ul/li");
+
+        const hoursCount = await hours.count();
+        console.log("Hours locator:", hoursCount);
+
+        // Find and select configured hour
+        for (let i = 0; i < hoursCount; i++) {
+            const hourText = await hours.nth(i).textContent();
+            if (hourText.trim() == Endhours) {
+                await hours.nth(i).click();
+                break;
+            }
+        }
+
+        await this.page.waitForTimeout(1000);
+
+        // Select specific minutes from config
+        const minutes = this.page.locator("//div[@class='el-time-panel el-popper' and (@x-placement='top-start' or @x-placement='bottom-start')]//div[@class='el-time-spinner']//div[@class='el-time-spinner__wrapper el-scrollbar'][2]//ul/li");
+        //await minutes.first().waitFor();
+        await this.page.waitForTimeout(1000);
+        const minutesCount = await minutes.count();
+        console.log("Minutes count:", minutesCount);
+
+
+        // Find and select configured minutes
+        for (let i = 0; i < minutesCount; i++) {
+            const minuteText = await minutes.nth(i).textContent();
+            if (minuteText.trim() == EndMin) {
+                console.log("Clicking on minute:", minuteText);
+
+                await minutes.nth(i).click();
+                await this.page.waitForTimeout(500);
+                break;
+            }
+        }
+        // Click OK
+        const Ok = await this.page.locator("//div[@class='el-time-panel el-popper' and (@x-placement='top-start' or @x-placement='bottom-start')]//div[@class='el-time-panel__footer']//button[@type='button'][normalize-space()='OK']")
+        await Ok.click({ force: true })
+        await this.page.waitForTimeout(500);
+
+    }
+
+    async Recurrence(recurrence, fortnight1, fortnight2, week, date1, month, date2) {
+        const recur = recurrence.toLowerCase();
+
+        await this.page.selectOption(
+            "//div[@id='recurrenceScroll']/label/following-sibling::select[@class='custom-select']",
+            { value: recur }
+        );
+        await this.page.waitForTimeout(1500);
+
+        if (recur === "weekday" || recur === "weekend") {
+            console.log(`Recurrence type: ${recur}`);
+        } else if (recur === "fortnight") {
+            await this.Fortnight(fortnight1, fortnight2);
+        } else if (recur === "week") {
+            await this.Week(week);
+        } else if (recur === "month") {
+            await this.Month(date1)
+        } else if (recur === "year") {
+            await this.Year(month, date2)
+        }
+    }
+
+    async Fortnight(week1, week2) {
+        const dayMap = {
+            monday: { text: 'M', index: 1 },
+            tuesday: { text: 'T', index: 1 },
+            wednesday: { text: 'W', index: 1 },
+            thursday: { text: 'T', index: 2 },
+            friday: { text: 'F', index: 1 },
+            saturday: { text: 'S', index: 1 },
+            sunday: { text: 'S', index: 2 }
+        };
+
+        // Store both in an array, but skip undefined / empty ones
+        const weeks = [week1, week2].filter(Boolean);
+
+        for (let i = 0; i < weeks.length; i++) {
+            const currentWeek = `Week ${i + 1}`;
+            const days = weeks[i];
+
+            // Skip if the value is empty or invalid
+            if (!days || !days.trim()) {
+                console.log(`Skipping ${currentWeek}: No days provided`);
+                continue;
+            }
+
+            // Clean up input from Excel: remove [], "", ''
+            const daystoclick = days
+                .replace(/[\[\]"']/g, '')
+                .split(',')
+                .map(d => d.trim().toLowerCase())
+                .filter(Boolean); // remove any empty strings
+
+            console.log(`Days to click for ${currentWeek}:`, daystoclick);
+
+            for (const day of daystoclick) {
+                if (!dayMap[day]) {
+                    console.warn(`Unknown day '${day}' in ${currentWeek}, skipping`);
+                    continue;
+                }
+
+                const { text, index } = dayMap[day];
+                const locatorXPath = `(//h6[text()='${currentWeek}']/../following-sibling::button[contains(text(),'${text}')])[${index}]`;
+                const locator = this.page.locator(locatorXPath);
+
+                await locator.click();
+                console.log(`Clicked ${day} for ${currentWeek}`);
+            }
+        }
+
+        await this.page.waitForTimeout(1500);
     }
 
 
-  }
-  async View_CompliancePolicy() {
+    async Week(days) {
+        const dayMap = {
+            monday: { text: 'M', index: 1 },
+            tuesday: { text: 'T', index: 1 },
+            wednesday: { text: 'W', index: 1 },
+            thursday: { text: 'T', index: 2 },
+            friday: { text: 'F', index: 1 },
+            saturday: { text: 'S', index: 1 },
+            sunday: { text: 'S', index: 2 }
+        };
+
+        // Clean up input from Excel: remove [], "", ''
+        const daystoclick = days.replace(/[\[\]"']/g, '').split(',').map(d => d.trim().toLowerCase());
+        console.log(`Days to click for :`, daystoclick);
+
+        for (const day of daystoclick) {
+            const { text, index } = dayMap[day];
+            const locatorXPath = `//button[contains(text(),'${text}')][${index}]`;
+            const locator = await this.page.locator(locatorXPath);
+
+            await locator.click();
+            console.log(`Clicked ${day}`);
+        }
 
 
+        await this.page.waitForTimeout(1500);
+    }
+
+    async Month(num) {
+
+        const month = await this.page.locator("//input[@id='selectedDate']")
+        await month.waitFor({ state: 'visible' })
+        month.fill(num)
+    }
+    async Year(date1, month) {
+
+        const date = await this.page.locator("//input[@id='selectedDate']")
+        await date.waitFor({ state: 'visible' })
+        date.fill(date1)
+        await this.page.selectOption(".custom-select", { label: `${month}` });
+    }
+
+    async Date(startDate, startMonth, startYear, endDate, endMonth, endYear) {
+
+        const storeyear = this.page.locator("(//div[@class='el-date-picker__header']/span)[1]");
+        const storemonth = this.page.locator("(//div[@class='el-date-picker__header']/span)[2]");
+        await this.startDate.click();
+        //   await this.page.pause()
+        await this.page.waitForTimeout(1000);
+
+        const getYearText = await storeyear.nth(0).textContent();
+        const currentYear = parseInt(getYearText.trim());
+        const targetYear = parseInt(startYear);
 
 
-    //Click the View button for the specific-policy
-    await this.viewbutton.click();
-    await this.page.waitForTimeout(500);
-    await this.description.scrollIntoViewIfNeeded();
-    await this.page.waitForTimeout(1000);
-    await this.backArrow.click();
-    await this.page.waitForTimeout(2000);
-  }
-  async Edit_CompliancePolicy() {
+        //disabled
+        const isEnabled = await this.page.locator("//tr[@class='el-date-table__row']/td")
+        const count = await isEnabled.count();
+        //console.log(count);
 
-    //Click the edit button for the specific-policy
+        for (let j = 0; j < count; j++) {
+            const element = isEnabled.nth(j);  // get the element locator
 
-    await this.Editbutton.click();
-    await this.page.waitForTimeout(500);
-    await this.backArrow.click();
-    await this.page.waitForTimeout(500);
-    await this.Editbutton.click();
-    await this.page.waitForTimeout(500);
-    await this.description.scrollIntoViewIfNeeded();
-    await this.page.waitForTimeout(500);
-    await this.cancel.click();
-    await this.confirmNo.click();
-    await this.page.waitForTimeout(500);
-    await this.cancel.click();
-    await this.confirmYes.click();
-    await this.page.waitForTimeout(500);
-    await this.Editbutton.click();
-    await this.page.waitForTimeout(500);
-    await this.description.scrollIntoViewIfNeeded();
-    await this.page.waitForTimeout(500);
-    await this.description.fill("This is for Edit Automation testing purpose");
-    await this.page.waitForTimeout(500);
-    await this.submit.click();
-    await this.page.waitForTimeout(500);
-    await this.confirmNo.click();
-    await this.page.waitForTimeout(500);
-    await this.submit.click();
-    await this.page.waitForTimeout(500);
-    await this.confirmYes.click();
-    await this.page.waitForTimeout(2000);
-  }
-  async delete_CompliancePolicy() {
+            const className = await element.getAttribute('class'); // get the class attribute
 
-    //Click the Delete button for the specifi-policy
-    await this.deletebutton.click();
-    await this.page.waitForTimeout(500);
-    await this.cancelIcon.click();
-    await this.page.waitForTimeout(500);
-    await this.deletebutton.click();
-    await this.page.waitForTimeout(500);
-    await this.confirmNo.click();
-    await this.page.waitForTimeout(1000);
-    //await Delete.click();
-    //await this.confirmYes.click();
-
-  }
+            if (currentYear === targetYear && className == "normal disabled") {
+                await this.page.waitForTimeout(1000);
+                await this.page.locator("(//tr[@class='el-date-table__row']/td[@class='available today'])[1]").click();
+                await this.page.waitForTimeout(2000);
 
 
+            } else {
+                //  await this.startDate.scrollIntoViewIfNeeded();
+                await this.HandleDate(startDate, startMonth, startYear, false);
+                await this.page.waitForTimeout(1000);
+            }
+            await this.endDate.click();
+            await this.HandleDate(endDate, endMonth, endYear, true);
+            return
+        }
+
+    }
+
+
+    async HandleDate(date, month, year, isEndDate = false) {
+        // await dateField.click();
+        // await this.page.waitForTimeout(500);
+
+        const calendarIndex = isEndDate ? 2 : 1;
+
+        // More specific locators for each calendar instance
+        const yearLabel = this.page.locator(`(//div[@class='el-date-picker__header']/span)[${calendarIndex * 2 - 1}]`);
+        const monthLabel = this.page.locator(`(//div[@class='el-date-picker__header']/span)[${calendarIndex * 2}]`);
+
+        // Get and handle year selection
+        const currentYear = parseInt(await yearLabel.textContent());
+        const targetYear = parseInt(year);
+
+        if (currentYear !== targetYear) {
+            const yearDiff = targetYear - currentYear;
+            const nextYearBtn = this.page.locator(`(//button[@class='el-picker-panel__icon-btn el-date-picker__next-btn el-icon-d-arrow-right'])[${calendarIndex}]`);
+
+            for (let i = 0; i < Math.abs(yearDiff); i++) {
+                await nextYearBtn.click();
+                await this.page.waitForTimeout(500);
+            }
+        }
+
+        // Updated month selection with index-based locators
+        await this.page.waitForTimeout(500)
+        await monthLabel.waitFor({ state: 'visible', timeout: 5000 })
+        await monthLabel.click();
+        await this.page.waitForTimeout(1000);
+
+        // Updated month selector with better visibility check
+        const monthLocator = `(//div[@class='el-picker-panel__content'])[${calendarIndex}]//a[contains(text(),'${month}')]`;
+        await this.page.waitForSelector(monthLocator);
+        await this.page.locator(monthLocator).click();
+        await this.page.waitForTimeout(1000);
+
+        // First try exact date
+        const exactDateLocator = `(//div[@class='el-picker-panel__content'])[${calendarIndex}]//td[contains(@class,'available')]//span[text()='${date}']`;
+        const dateElement = this.page.locator(exactDateLocator);
+
+        // Wait for either exact date or available dates to be visible
+        await Promise.race([
+            dateElement.waitFor({ state: 'visible', timeout: 5000 }),
+            this.page.waitForSelector(`(//div[@class='el-picker-panel__content'])[${calendarIndex}]//td[contains(@class,'available')]`,
+                { state: 'visible', timeout: 5000 })
+        ]);
+
+        // If exact date is found, click it
+        if (await dateElement.count() > 0) {
+            // console.log("dateElement:", dateElement);
+
+            await dateElement.click();
+        } else {
+            // Otherwise, find the date among available dates
+            const availableDates = this.page.locator(`(//div[@class='el-picker-panel__content'])[${calendarIndex}]//td[contains(@class,'available')]`);
+            const count = await availableDates.count();
+            console.log("Available dates count:", count);
+
+
+            for (let i = 0; i < count; i++) {
+                //   console.log("284 Iterating available date index:", i);
+
+                const dateText = await availableDates.nth(i).textContent();
+                //  console.log(`287 Checking date: ${dateText}`);
+                if (dateText.trim() === date) {
+                    await availableDates.nth(i).click();
+                    console.log(`Clicked on date: ${date}`);
+
+                    break;
+
+                }
+            }
+        }
+        await this.page.waitForTimeout(1000);
+
+    }
+
+    async Description(Description) {
+        await this.description.scrollIntoViewIfNeeded();
+
+        await this.description.fill(Description);
+        await this.page.waitForTimeout(500);
+    }
+
+    async View_Policy(ass, tname) {
+        const assetname = ass.toLowerCase();
+        const taskname = tname.toLowerCase();
+        await this.page.locator(`.ag-body-horizontal-scroll-viewport`).evaluate(el => {
+
+            el.scrollLeft = el.scrollWidth;
+        });
+        const locatorOptions = [
+            {
+                //View With AssetName & TaskName.
+                view: this.page.locator(`//div[@col-id='assetName' and contains(translate(normalize-space(translate(., ' ', '')), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), '${assetname}')]/following-sibling::div[@col-id='name' and contains(translate(normalize-space(.), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), '${taskname}')]/following-sibling::div[@col-id='action']//button[contains(@class, 'view-btn')]`)
+            },
+            {
+                //View With AssetName.
+                view: this.page.locator(`//div[@col-id='assetName' and contains(translate(normalize-space(translate(., ' ', '')), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), '${assetname}')]/following-sibling::div[@col-id='action']//button[contains(@class, 'view-btn')]`)
+            },
+
+            {
+                //View With TaskName.
+                view: this.page.locator(`//div[@col-id='name' and contains(translate(normalize-space(.), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), '${taskname}')]/following-sibling::div[@col-id='action']//button[contains(@class, 'view-btn')]`)
+            }
+
+        ];
+
+        for (const { view } of locatorOptions) {
+            // Skip if locator is too generic (e.g., asset code is empty)
+            const viewCount = await view.count();
+            if (viewCount !== 1) continue;
+
+            const isVisible = await view.isVisible();
+            if (isVisible) {
+                await view.waitFor({ state: 'visible' });
+                await view.click();
+                await this.page.waitForTimeout(2000)
+                return;
+            }
+        }
+
+    }
+    async Edit_Policy(ass, tname) {
+        const assetname = ass.toLowerCase();
+        const taskname = tname.toLowerCase();
+        await this.page.locator(`.ag-body-horizontal-scroll-viewport`).evaluate(el => {
+
+            el.scrollLeft = el.scrollWidth;
+        });
+        const locatorOptions = [
+            {
+                //Edit With AssetCode.
+                Edit: this.page.locator(`//div[@col-id='assetName' and contains(translate(normalize-space(translate(., ' ', '')), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), '${assetname}')]/following-sibling::div[@col-id='name' and contains(translate(normalize-space(.), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), '${taskname}')]/following-sibling::div[@col-id='action']//button[contains(@class, 'edit-btn')]`)
+            },
+            {
+                //Edit With AssetName.
+                Edit: this.page.locator(`//div[@col-id='assetName' and contains(translate(normalize-space(translate(., ' ', '')), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), '${assetname}')]/following-sibling::div[@col-id='action']//button[contains(@class, 'edit-btn')]`)
+            },
+
+            {
+                //Edit With TaskName.
+                Edit: this.page.locator(`//div[@col-id='name' and contains(translate(normalize-space(.), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), '${taskname}')]/following-sibling::div[@col-id='action']//button[contains(@class, 'edit-btn')]`)
+            }
+        ];
+
+        for (const { Edit } of locatorOptions) {
+            // Skip if locator is too generic (e.g., asset code is empty)
+            const EditCount = await Edit.count();
+            if (EditCount !== 1) continue;
+
+            const isVisible = await Edit.isVisible();
+            if (isVisible) {
+                await Edit.waitFor({ state: 'visible' });
+                await Edit.click();
+                await this.page.waitForTimeout(2000)
+                return;
+            }
+        }
+
+    } async Delete_Policy(ass, tname) {
+        const assetname = ass.toLowerCase();
+        const taskname = tname.toLowerCase();
+        await this.page.locator(`.ag-body-horizontal-scroll-viewport`).evaluate(el => {
+
+            el.scrollLeft = el.scrollWidth;
+        });
+        const locatorOptions = [
+            {
+                //delete With AssetCode.
+                del: this.page.locator(`//div[@col-id='assetName' and contains(translate(normalize-space(translate(., ' ', '')), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), '${assetname}')]/following-sibling::div[@col-id='name' and contains(translate(normalize-space(.), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), '${taskname}')]/following-sibling::div[@col-id='action']//button[contains(@class, 'delete-btn')]`)
+            },
+                     {
+                //delete With AssetName.
+                del: this.page.locator(`//div[@col-id='assetName' and contains(translate(normalize-space(translate(., ' ', '')), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), '${assetname}')]/following-sibling::div[@col-id='action']//button[contains(@class, 'delete-btn')]`)
+            },
+
+            {
+                //delete With TaskName.
+                del: this.page.locator(`//div[@col-id='name' and contains(translate(normalize-space(.), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), '${taskname}')]/following-sibling::div[@col-id='action']//button[contains(@class, 'delete-btn')]`)
+            }
+        ];
+
+        for (const { del } of locatorOptions) {
+            // Skip if locator is too generic (e.g., asset code is empty)
+            const deleteCount = await Edit.count();
+            if (deleteCount !== 1) continue;
+
+            const isVisible = await del.isVisible();
+            if (isVisible) {
+                await del.waitFor({ state: 'visible' });
+                await del.click();
+                await this.page.waitForTimeout(2000)
+                return;
+            }
+        }
+
+    }
+    async Cancel() {
+        await this.cancel.waitFor({ state: 'visible' })
+        await this.cancel.click();
+        await this.page.waitForTimeout(500);
+
+    }
+
+    async Submit() {
+        await this.submit.waitFor({ state: 'visible' })
+        await this.submit.click();
+        await this.page.waitForTimeout(500);
+
+    }
+    async ConfirmYes() {
+        await this.confirmYes.waitFor({ state: 'visible' })
+
+        await this.confirmYes.click();
+        await this.page.waitForTimeout(2000);
+    }
+    async ConfirmNo() {
+        await this.confirmNo.waitFor({ state: 'visible' })
+        await this.confirmNo.click();
+        await this.page.waitForTimeout(1000);
+    }
+    async CancelIcon() {
+        await this.cancelIcon.waitFor({ state: 'visible' })
+        await this.cancelIcon.click();
+        await this.page.waitForTimeout(1000);
+    }
+
+    async Search() {
+        await this.search.waitFor({ state: 'visible' });
+
+        await this.search.click()
+        await this.page.waitForTimeout(500);
+    }
+    async Download() {
+        await this.download.waitFor({ state: 'visible' });
+
+        await this.download.click()
+        await this.page.waitForTimeout(500);
+    }
+    async BackArrow() {
+
+        this.backArrow = this.page.locator("//*[@data-icon='arrow-left']");
+
+
+        if (await this.backArrow.nth(2).isVisible()) {
+            await this.backArrow.nth(2).waitFor({ state: 'visible' });
+
+            await this.backArrow.nth(2).click();
+
+        }
+        if (await this.backArrow.nth(1).isVisible()) {
+            await this.backArrow.nth(1).waitFor({ state: 'visible' });
+
+            await this.backArrow.nth(1).click();
+
+        } else if (await this.backArrow.first().isVisible()) {
+            await this.backArrow.first().waitFor({ state: 'visible' });
+
+            await this.backArrow.first().click();
+        }
+        const load = this.page.locator("//div[@class='ag-center-cols-container']")
+        await load.waitFor({ state: 'visible' })
+
+        await this.page.waitForTimeout(1000);
+    }
 }
+
+
+
+
+
+
+
+

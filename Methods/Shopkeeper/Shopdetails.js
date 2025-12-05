@@ -11,6 +11,7 @@ exports.Shopdetails = class Shopdetails {
        // await this.page.pause();
       
         await Shopname.waitFor({ state: 'visible' })
+
         await Shopname.hover();
 
         await Shopname.click();
